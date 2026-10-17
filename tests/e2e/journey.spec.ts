@@ -159,9 +159,13 @@ test.describe('PaperBridge E2E Suite', () => {
   test('6. Keyboard accessibility: skip link and tab navigation', async ({ page }) => {
     await page.goto('/');
 
-    // Tab to skip link
-    await page.keyboard.press('Tab');
     const skipLink = page.getByRole('link', { name: /Skip to main content/i });
+    await expect(skipLink).toBeAttached();
+
+    // Start from the document body so the first Tab is deterministic in both
+    // headed browsers and headless Linux CI, where initial focus may otherwise
+    // remain outside the document after navigation.
+    await page.locator('body').press('Tab');
     await expect(skipLink).toBeFocused();
 
     // Press enter on skip link
