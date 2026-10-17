@@ -28,9 +28,9 @@
 | **Accessibility** | Cognitive accessibility modes (Focus, Reading Support, Read Aloud, High Contrast) | **PASS** | Accessible Drawer component with native `SpeechSynthesis` and persistence. |
 | **Localization** | Tri-lingual support: English, हिन्दी, मराठी | **PASS** | Complete dictionaries in `src/content/locales.ts`; E2E verified locale switching. |
 | **Engineering** | Strict TypeScript and Zero Linter Errors | **PASS** | `npm run typecheck` (`tsc -b`) passes; `npm run lint` (`oxlint`) reports 0 errors. |
-| **Engineering** | Unit and Component Test Suite | **PASS** | **46 of 46 tests passing** in Vitest with coverage thresholds enforced (Statements 87.04%, Branches 76.98%, Functions 86.08%, Lines 88.73%). |
+| **Engineering** | Unit and Component Test Suite | **PASS** | **46 of 46 tests passing** in Vitest with coverage thresholds enforced (Statements 86.97%, Branches 78.37%, Functions 86.08%, Lines 88.63%). |
 | **Engineering** | End-to-End Test Suite | **PASS** | **27 of 27 Playwright tests passing** across `accessibility.spec.ts`, `documents.spec.ts`, `journey.spec.ts`, `offline.spec.ts`, and `screenshots.spec.ts`. |
-| **Engineering** | Production Build & Offline PWA | **PASS** | Vite production bundle built cleanly (490 kB main chunk), PWA service worker precaches 34 assets, 0 third-party requests, Lighthouse Accessibility 100, Best Practices 100, Performance 94, SEO 91. |
+| **Engineering** | Production Build & Offline PWA | **PASS** | Vite production bundle built cleanly (491.87 kB main chunk / 140.92 kB gzip), PWA service worker precaches 34 assets, 0 third-party requests, Lighthouse Accessibility 100, Best Practices 100, Performance 94, SEO 91. |
 | **Release & Hosting**| Deployxa Configuration & Deployment | **PENDING ACTION** | `deployxa.json` and `public/_redirects` configured for static SPA hosting; live hosting deployment command pending. |
 | **Release & Git** | Clean Git repository and MIT open-source license | **PASS** | MIT License added; focused semantic commits. |
 | **Documentation** | Complete submission documentation package | **PASS** | Synchronized with current implementation; truthful privacy and readiness statements. |

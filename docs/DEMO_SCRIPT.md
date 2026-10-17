@@ -1,22 +1,22 @@
-# 90-Second Demonstration Video Script — PaperBridge
+# 100-Second Demonstration Video Script — PaperBridge
 
 ## Video Specifications
 - **Title:** PaperBridge — Public forms that explain themselves
-- **Target Duration:** Exactly 90 seconds (1 minute 30 seconds)
+- **Target Duration:** Approximately 100 seconds
 - **Voiceover Tone:** Calm, empathetic, articulate, authoritative
 - **Visual Style:** Screen capture at 1080p, 60fps, clean cursor without distracting zoom effects, real browser UI
 
 ---
 
 ### Shot 1: The Problem — Administrative Exclusion (0:00 – 0:10)
-- **Visual:** Split-screen or zoom-in showing a typical confusing, dense 40-field statutory scholarship application with tiny text and bureaucratic clauses.
+- **Visual:** PaperBridge landing page with its fictional-scheme notice and plain/official preview. Do not show or imply a real applicant record.
 - **Voiceover:**
   > *"Every year, eligible first-generation students lose out on life-changing scholarships—not because they don't qualify, but because official forms read like penal legal documents."*
 - **Action:** Mouse hovers over dense legal jargon, highlighting procedural intimidation.
 
 ---
 
-### Shot 2: Trust-First Entry & Preparation Contract (0:10 – 0:25)
+### Shot 2: Trust-First Entry & Preparation Contract (0:10 – 0:27)
 - **Visual:** Transition to PaperBridge landing page (`/`). The calm notebook aesthetic (`#F6F2EA` paper, deep ink, civic forest) immediately greets the viewer.
 - **Voiceover:**
   > *"Meet PaperBridge. A consent-first, cognitively accessible interface that turns intimidating public forms into a one-decision-at-a-time journey. Three promises upfront: No login required, answers stay in local browser storage, and official wording is always one tap away."*
@@ -24,7 +24,7 @@
 
 ---
 
-### Shot 3: The Flagship Plain Meaning ↔ Official Wording Interaction (0:25 – 0:48)
+### Shot 3: The Flagship Plain Meaning ↔ Official Wording Interaction (0:27 – 0:52)
 - **Visual:** The One-Decision question screen (`/application`).
 - **Voiceover:**
   > *"Here is our signature interaction: every question presents two inspectable layers. On the left: what this question means in plain language, with evidence hints and clear input. On the right or via toggle: the exact statutory clause, section reference, and why the government asks for it."*
@@ -32,7 +32,7 @@
 
 ---
 
-### Shot 4: First-Class Uncertainty & Zero Penalties (0:48 – 1:05)
+### Shot 4: First-Class Uncertainty & Zero Penalties (0:52 – 1:10)
 - **Visual:** The applicant encounters Question 2 (Statutory Category) and clicks *"I am not sure"*.
 - **Voiceover:**
   > *"What if an applicant doesn't know the exact answer? In traditional forms, they're forced to guess. In PaperBridge, uncertainty is a first-class state with zero penalties. Clicking 'I am not sure' gives contextual evidence tips and safely flags the item."*
@@ -40,18 +40,18 @@
 
 ---
 
-### Shot 5: Consent-Controlled Helper Handoff (1:05 – 1:20)
+### Shot 5: Consent-Controlled Helper Handoff (1:10 – 1:28)
 - **Visual:** The Helper Handoff screen (`/handoff`).
 - **Voiceover:**
-  > *"When students need help from a teacher or CSC operator, they shouldn't have to hand over their phone or passwords. PaperBridge generates an expiring, consent-controlled helper packet. Personal identity documents are unselected by default. And students can revoke access with a single click."*
-- **Action:** Check desired sections, generate synthetic local token `PB-2026-XXXXXX` with QR code, then click *"Revoke Packet Access Now"* showing immediate local revocation.
+  > *"When students need help from a teacher or CSC operator, they shouldn't have to hand over their phone or passwords. PaperBridge generates an expiring, consent-controlled local helper packet. Personal identifiers are excluded by default. Local revocation clears the current browser session, while an honest warning explains that a copied packet cannot be remotely recalled."*
+- **Action:** Check desired sections, generate synthetic local token `PB-2026-XXXXXX` with QR code, show the limitation notice, then demonstrate local revocation.
 
 ---
 
-### Shot 6: Honest Completion & Technical Rigor (1:20 – 1:30)
-- **Visual:** The Completion screen (`/complete`) showing the honest mandate: *"Your PaperBridge preparation is complete. Continue on the official portal."* Cut to terminal showing CI suite with green checks for 16 unit tests, 9 Playwright E2E tests, and 0 axe violations.
+### Shot 6: Honest Completion & Technical Rigor (1:28 – 1:40)
+- **Visual:** The Completion screen (`/complete`) showing the honest mandate: *"Your PaperBridge preparation is complete. Continue on the official portal."* Cut to the public GitHub Actions result showing the green dependency audit, lint, typecheck, coverage, build, and full E2E job.
 - **Voiceover:**
-  > *"PaperBridge never fakes a government submission—it empowers applicants to arrive at the official portal prepared, confident, and sovereign. Fully tested, WCAG 2.2 AA compliant, and open source."*
+  > *"PaperBridge never fakes a government submission—it helps applicants reach the official portal prepared and confident. Forty-six unit tests and twenty-seven browser tests pass, including automated WCAG A and AA checks across every primary route. The project is open source and ready for manual field testing."*
 - **Closing Card:** 
   - PaperBridge — Public forms that explain themselves.
   - Built for Hyperbloom October 2026 by Team MetaMask (Abhijeet Nardele).

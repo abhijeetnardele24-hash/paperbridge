@@ -54,22 +54,22 @@
 While field trials remain pending, PaperBridge was audited against the 10 NN/g Usability Heuristics:
 
 1. **Visibility of System Status:**
-   - *Audit Score: 10/10.* Persistent progress pill ("Step 3 of 5", "Question 1 of 6"), live local-save indicator ("Saved locally on this device"), and clear document readiness badges (Technically Ready, Needs Technical Attention, Not Added).
+   - *Heuristic result: implemented and automatically verified.* Persistent progress pill ("Step 3 of 5", "Question 1 of 6"), live local-save indicator ("Saved locally on this device"), and clear document readiness badges (Technically Ready, Needs Technical Attention, Not Added).
 2. **Match Between System and the Real World:**
-   - *Audit Score: 10/10.* Signature Dual-Layer design bridges statutory administrative jargon with natural spoken terminology and contextual evidence references (e.g., "Look at Box 3 of your Tahsildar certificate").
+   - *Heuristic result: implemented.* Signature Dual-Layer design bridges statutory administrative jargon with natural spoken terminology and contextual evidence references (e.g., "Look at Box 3 of your Tahsildar certificate").
 3. **User Control and Freedom:**
-   - *Audit Score: 10/10.* Instant back navigation preserving all previous answers; one-click local handoff revocation (clearing active browser state; note: cannot remotely invalidate already copied payloads); non-destructive demo reset.
+   - *Heuristic result: implemented and automatically verified.* Instant back navigation preserving all previous answers; one-click local handoff revocation (clearing active browser state; note: cannot remotely invalidate already copied payloads); non-destructive demo reset.
 4. **Consistency and Standards:**
-   - *Audit Score: 10/10.* Universal 44px touch targets, standard HTML5 radio buttons and form inputs, consistent header controls across all 9 routes.
+   - *Heuristic result: implemented and automatically verified.* Universal 44px touch targets, standard HTML5 radio buttons and form inputs, consistent header controls across all 9 routes.
 5. **Error Prevention:**
-   - *Audit Score: 10/10.* "I am not sure" path prevents forced guessing on complex administrative fields; ineligibility triage explains rules immediately before time is spent filling out details.
+   - *Heuristic result: implemented.* "I am not sure" path prevents forced guessing on complex administrative fields; ineligibility triage explains rules immediately before time is spent filling out details.
 6. **Recognition Rather than Recall:**
-   - *Audit Score: 10/10.* Review Map groups all answers visually into Complete, Needs Checking, and Missing partitions with direct 1-click return links.
+   - *Heuristic result: implemented.* Review Map groups all answers visually into Complete, Needs Checking, and Missing partitions with direct 1-click return links.
 7. **Flexibility and Efficiency of Use:**
-   - *Audit Score: 9/10.* Stepper buttons allow quick jumping between questions; keyboard skip link (`Alt+S`) allows immediate focus transfer.
+   - *Heuristic result: implemented.* Stepper buttons allow quick jumping between questions; keyboard skip link (`Alt+S`) allows immediate focus transfer.
 8. **Aesthetic and Minimalist Design:**
-   - *Audit Score: 10/10.* Clean paper notebook aesthetic (`#F6F2EA`); zero decorative AI-slop gradients, zero distracting popups, strict typographic hierarchy.
+   - *Heuristic result: implemented.* Clean paper notebook aesthetic (`#F6F2EA`); zero decorative gradients, zero distracting popups, strict typographic hierarchy.
 9. **Help Users Recognize, Diagnose, and Recover from Errors:**
-   - *Audit Score: 10/10.* Supportive exit paths on ineligible answers ("Recommended Supportive Next Steps")—never a dead end.
+   - *Heuristic result: implemented.* Supportive exit paths on ineligible answers ("Recommended Supportive Next Steps")—never a dead end.
 10. **Help and Documentation:**
-    - *Audit Score: 10/10.* Contextual "Why we ask this" and "Where to find this in your documents" drawers available directly on every question card.
+    - *Heuristic result: implemented.* Contextual "Why we ask this" and "Where to find this in your documents" drawers available directly on every question card.

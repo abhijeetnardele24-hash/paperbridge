@@ -42,7 +42,7 @@ If PaperBridge were to transition from a design prototype to a public service de
 
 ## 5. Verification Truthfulness & Measured Test Evidence
 - All test counts reported in this repository reflect real, automated and reproducible executions:
-  - **Vitest Unit & Component Suite:** **46 / 46 tests passing** with strict coverage gates enforced (Statements 87.04%, Branches 76.98%, Functions 86.08%, Lines 88.73%).
+  - **Vitest Unit & Component Suite:** **46 / 46 tests passing** with strict coverage gates enforced (Statements 86.97%, Branches 78.37%, Functions 86.08%, Lines 88.63%).
   - **Playwright Full E2E Suite:** **27 / 27 tests passing** across `accessibility.spec.ts` (including desktop header bounding-box collision checks at 1024–1920px), `documents.spec.ts`, `journey.spec.ts`, `offline.spec.ts`, and `screenshots.spec.ts`.
   - **Lighthouse 13.5.0 Audit Scores:** **Accessibility: 100/100**, **Best Practices: 100/100**, **Performance: 94/100**, **SEO: 91/100** (evaluated on production preview build).
   - **Zero Third-Party Network Requests:** Verified 0 occurrences of Google Fonts CDN (`fonts.googleapis` / `fonts.gstatic`). WOFF2 fonts are bundled locally via official `@fontsource/atkinson-hyperlegible` and `@fontsource-variable/newsreader` packages.

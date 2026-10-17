@@ -95,10 +95,10 @@ All metrics below reflect real, automated and reproducible executions:
 ✓ Vitest Unit & Component Suite:
   - 46 / 46 passed (100% test pass rate)
   - Strict coverage gates satisfied:
-    * Statements: 87.04% (threshold: 85%)
-    * Branches:   76.98% (threshold: 75%)
+    * Statements: 86.97% (threshold: 85%)
+    * Branches:   78.37% (threshold: 75%)
     * Functions:  86.08% (threshold: 85%)
-    * Lines:      88.73% (threshold: 85%)
+    * Lines:      88.63% (threshold: 85%)
 
 ✓ Playwright Full E2E & Accessibility Suite:
   - 27 / 27 passed across 5 test suites (accessibility, documents, journey, offline, screenshots)
@@ -122,7 +122,7 @@ All metrics below reflect real, automated and reproducible executions:
 ✓ Static Engineering Quality:
   - TypeScript strict compile (tsc -b): 0 errors
   - Oxlint linter: 0 errors
-  - Production bundle build: Code-split main bundle 490 kB (<500 kB threshold)
+  - Production bundle build: Code-split main bundle 491.87 kB / 140.92 kB gzip (<500 kB raw threshold)
 ```
 
 ---

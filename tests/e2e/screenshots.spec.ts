@@ -12,11 +12,24 @@ test.describe('PaperBridge Deterministic Screenshot Capture', () => {
   });
 
   test('Capture complete 12-stage high-resolution evidence screenshots', async ({ page }) => {
+    // Freeze all values rendered into evidence screenshots. This keeps the
+    // handoff token, QR payload, creation time, and expiry time identical on
+    // every local and CI capture.
+    await page.clock.setFixedTime(new Date('2026-10-18T12:00:00.000Z'));
+    await page.addInitScript(() => {
+      Math.random = () => 0.123456789;
+    });
+
     const snap = async (filename: string) => {
       await page.evaluate(() => document.fonts.ready);
+      // Allow one stable paint after the final web-font swap. Native select
+      // text otherwise occasionally lands in the capture mid-rasterization.
+      await page.waitForTimeout(100);
       await page.screenshot({
         path: path.join(screenshotsDir, filename),
         fullPage: false,
+        animations: 'disabled',
+        caret: 'hide',
       });
     };
 

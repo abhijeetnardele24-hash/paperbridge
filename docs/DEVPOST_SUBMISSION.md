@@ -34,7 +34,7 @@ PaperBridge does not attempt to replace official government portals or decide le
 3. **Document Readiness Board:**
    Interactive synthetic cards guide students through required identity, income, enrolment, and bank documents with clear visual specimen checklists before they type answers.
 4. **Consent-Controlled Helper Handoff:**
-   Students can share selected sections with teachers or village operators via a time-limited local token (`PB-2026-XXXXXX`) and QR code. Sensitive personal identifiers are unselected by default, and access can be revoked with a single click.
+   Students can share selected sections with teachers or village operators via a time-limited local token (`PB-2026-XXXXXX`) and QR code. Sensitive personal identifiers are unselected by default. The active token can be revoked locally with one click, although revocation cannot recall a payload that a recipient has already copied.
 5. **Cognitive Accessibility by Design:**
    Includes dedicated Focus Mode (hides collateral metadata), Reading Support (optimized line length and spacing), Native Read Aloud (browser-based speech synthesis without cloud latency), and High Contrast mode.
 
@@ -62,7 +62,7 @@ PaperBridge does not attempt to replace official government portals or decide le
 ## Accomplishments We're Proud Of
 - Achieving **0 axe-core accessibility violations** across all 9 primary routes.
 - Designing an interaction model where uncertainty is treated as valid information rather than a validation error.
-- Delivering a production application shell (490 kB main chunk / 140 kB gzip) that runs completely offline with self-hosted fonts and zero trackers.
+- Delivering a production application shell (491.87 kB main chunk / 140.92 kB gzip) that runs completely offline with self-hosted fonts and zero trackers.
 
 ---
 
