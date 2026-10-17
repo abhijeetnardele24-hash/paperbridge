@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<speak version="1.0" xml:lang="en-IN">
+  <voice name="Microsoft Heera">
+    <prosody rate="+25%">
+      Every year, eligible first-generation students lose opportunities, not because they fail the rules, but because public forms are difficult to understand.
+      <break time="900ms" />
+      Meet PaperBridge: a consent-first, cognitively accessible interface that turns intimidating paperwork into one decision at a time. No login is required. Answers remain in local browser storage. Official wording is always available.
+      <break time="900ms" />
+      Preparation starts before data entry. A clear contract explains privacy and scope, while the Document Readiness Board checks file type, size, and image resolution without uploading the document.
+      <break time="900ms" />
+      Here is the signature interaction. Each question has two inspectable layers: plain language, evidence hints, and a clear input; then the exact official clause, reference, and reason for asking.
+      <break time="900ms" />
+      If an applicant is unsure, PaperBridge never forces a guess. Uncertainty is a first-class state. Evidence tips explain what to check, and the Review Map places the item under Needs Checking with a direct return link.
+      <break time="900ms" />
+      When help is needed, PaperBridge creates an expiring, consent-controlled helper packet. Personal identifiers are excluded by default. Local revocation clears the active browser session, while an honest warning explains that an already copied packet cannot be recalled.
+      <break time="900ms" />
+      PaperBridge never pretends to submit a government form. It prepares the applicant to continue confidently on the official portal. Forty-six unit and component tests, and twenty-seven browser tests pass, including automated accessibility checks across every primary route.
+      <break time="700ms" />
+      PaperBridge. Public forms that explain themselves. Built for Hyperbloom October by Team MetaMask.
+    </prosody>
+  </voice>
+</speak>
