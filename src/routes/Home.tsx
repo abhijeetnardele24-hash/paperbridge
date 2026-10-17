@@ -196,6 +196,7 @@ export const Home: React.FC = () => {
               question={previewQuestion}
               value={demoValue}
               isUncertain={isDemoUncertain}
+              headingLevel="h3"
               onChange={(val) => setDemoValue(val)}
               onOpenUncertainModal={() => setUncertainModalOpen(true)}
             />

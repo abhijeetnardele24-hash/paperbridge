@@ -11,16 +11,24 @@ export const AccessibilityDrawer: React.FC<AccessibilityDrawerProps> = ({ isOpen
   const { state, updateAccessibility, resetDemo, t } = useJourney();
   const drawerRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const previousActiveElementRef = useRef<HTMLElement | null>(null);
 
-  // Focus management
+  // Focus management and body scroll locking
   useEffect(() => {
     if (isOpen) {
+      previousActiveElementRef.current = document.activeElement as HTMLElement;
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
       closeBtnRef.current?.focus();
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') onClose();
       };
       window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+        previousActiveElementRef.current?.focus();
+      };
     }
   }, [isOpen, onClose]);
 

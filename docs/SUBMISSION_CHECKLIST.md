@@ -28,9 +28,9 @@
 | **Accessibility** | Cognitive accessibility modes (Focus, Reading Support, Read Aloud, High Contrast) | **PASS (GO)** | Accessible Drawer component with native `SpeechSynthesis` and persistence. |
 | **Localization** | Tri-lingual support: English, हिन्दी, मराठी | **PASS (GO)** | Complete dictionaries in `src/content/locales.ts`; E2E Test #7 verified locale switching. |
 | **Engineering** | Strict TypeScript and Zero Linter Errors | **PASS (GO)** | `tsc -b` passes; `oxlint` reports 0 errors. |
-| **Engineering** | Unit and Component Test Suite | **PASS (GO)** | **16 of 16 tests passing** in Vitest (`JourneyContext`, `DocumentCard`, `PlainOfficialCard`, `ReviewAndHandoff`). |
-| **Engineering** | End-to-End Test Suite | **PASS (GO)** | **9 of 9 Playwright tests passing** covering happy path, ineligibility, uncertainty, handoff, keyboard, locale, responsive, and axe. |
-| **Engineering** | Production Build Passing | **PASS (GO)** | Vite production build passes in ~250ms (bundle: ~112 kB gzip). |
+| **Engineering** | Unit and Component Test Suite | **PASS (GO)** | **44 of 44 tests passing** in Vitest with coverage thresholds enforced (Statements 87.04%, Branches 76.98%, Functions 86.08%, Lines 88.73%). |
+| **Engineering** | End-to-End Test Suite | **PASS (GO)** | **26 of 26 Playwright tests passing** across `accessibility.spec.ts`, `documents.spec.ts`, `journey.spec.ts`, `offline.spec.ts`, and `screenshots.spec.ts`. |
+| **Engineering** | Production Build & Offline PWA | **PASS (GO)** | Vite production bundle built cleanly (<500 kB main chunk), PWA service worker precaches 34 assets, 0 third-party requests, Lighthouse Accessibility 100, Best Practices 100, Performance 94, SEO 91. |
 | **Release & Hosting**| Deployxa Configuration & Deployment | **PASS (GO)** | `deployxa.json` and `public/_redirects` configured for static SPA hosting. |
 | **Release & Git** | Clean Git repository and MIT open-source license | **PASS (GO)** | MIT License added; focused semantic commits. |
 | **Documentation** | Complete submission documentation package | **PASS (GO)** | `README.md`, `RESEARCH.md`, `DESIGN_DECISIONS.md`, `ACCESSIBILITY.md`, `ARCHITECTURE.md`, `DEMO_SCRIPT.md`, `DEVPOST_SUBMISSION.md`, `PRIVACY_AND_TRUTHFULNESS.md`, `USABILITY_PROTOCOL.md`. |

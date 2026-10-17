@@ -277,6 +277,7 @@ export const JourneyProvider: React.FC<{ children: React.ReactNode }> = ({ child
   );
 };
 
+// oxlint-disable-next-line react/only-export-components
 export const useJourney = () => {
   const context = useContext(JourneyContext);
   if (!context) {

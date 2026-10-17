@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useJourney } from '../state/JourneyContext';
 import { DocumentCard } from '../components/DocumentCard';
-import { ArrowRight, ArrowLeft, CheckCircle2, AlertTriangle, FileQuestion } from 'lucide-react';
+import { ArrowRight, ArrowLeft, CheckCircle2, AlertTriangle, FileQuestion, ShieldCheck } from 'lucide-react';
 
 export const Documents: React.FC = () => {
   const { state, t } = useJourney();
@@ -18,8 +18,8 @@ export const Documents: React.FC = () => {
         {/* Header & Status Banner */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-            <span className="badge badge-source">Step 2 of 5: Document Readiness</span>
-            <span className="badge badge-demo">Synthetic Verification</span>
+            <span className="badge badge-source">{t.documents.stepBadge}</span>
+            <span className="badge badge-demo">{t.documents.demoBadge}</span>
           </div>
 
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-3xl)', fontWeight: 700 }}>
@@ -29,6 +29,28 @@ export const Documents: React.FC = () => {
           <p style={{ fontSize: 'var(--text-lg)', color: 'var(--color-ink-muted)', maxWidth: '780px' }}>
             {t.documents.subheading}
           </p>
+
+          {/* Technical Disclaimer Notice */}
+          <div
+            role="note"
+            aria-label="Technical Scope Disclaimer"
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: 'var(--space-3)',
+              padding: 'var(--space-3) var(--space-4)',
+              backgroundColor: 'var(--color-paper-sunken)',
+              borderRadius: 'var(--radius-md)',
+              borderLeft: '4px solid var(--color-forest)',
+              fontSize: 'var(--text-sm)',
+              color: 'var(--color-ink)',
+              lineHeight: 1.5,
+              marginTop: 'var(--space-1)',
+            }}
+          >
+            <ShieldCheck size={18} style={{ color: 'var(--color-forest)', flexShrink: 0, marginTop: '2px' }} />
+            <span>{t.documents.technicalDisclaimer}</span>
+          </div>
 
           {/* Readiness Summary Bar */}
           <div
@@ -44,29 +66,29 @@ export const Documents: React.FC = () => {
               marginTop: 'var(--space-2)',
             }}
           >
-            <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700 }}>Current Board Status:</span>
+            <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700 }}>{t.documents.boardStatusLabel}</span>
 
             <span className="badge badge-success">
               <CheckCircle2 size={13} />
-              {readyCount} Ready
+              {readyCount} {t.documents.statusReady}
             </span>
 
             {needsAttentionCount > 0 && (
               <span className="badge badge-warning">
                 <AlertTriangle size={13} />
-                {needsAttentionCount} Needs Attention
+                {needsAttentionCount} {t.documents.statusNeedsAttention}
               </span>
             )}
 
             {missingCount > 0 && (
               <span className="badge badge-error">
                 <FileQuestion size={13} />
-                {missingCount} Missing
+                {missingCount} {t.documents.statusMissing}
               </span>
             )}
 
             <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)', marginLeft: 'auto' }}>
-              🔒 Simulated file inspection — zero cloud uploads.
+              🔒 {t.documents.localInspectionOnly}
             </span>
           </div>
         </div>
@@ -98,11 +120,11 @@ export const Documents: React.FC = () => {
         >
           <Link to="/eligibility" className="btn btn-secondary">
             <ArrowLeft size={16} />
-            <span>Back to Eligibility Triage</span>
+            <span>{t.documents.backToEligibility}</span>
           </Link>
 
           <Link to="/application" className="btn btn-primary" style={{ padding: 'var(--space-3) var(--space-6)' }}>
-            <span>Continue to One-Decision Application</span>
+            <span>{t.documents.continueToApplication}</span>
             <ArrowRight size={18} />
           </Link>
         </div>

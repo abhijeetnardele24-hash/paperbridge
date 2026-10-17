@@ -8,7 +8,7 @@ on:
 
 jobs:
   test-and-verify:
-    name: Lint, Test, Axe & Build
+    name: Lint, Typecheck, Coverage, Build & Full E2E
     runs-on: ubuntu-latest
 
     steps:
@@ -30,8 +30,8 @@ jobs:
       - name: Run TypeScript typecheck
         run: npx tsc -b
 
-      - name: Run Unit & Component Tests (Vitest)
-        run: npm test
+      - name: Run Unit & Coverage Threshold Gates
+        run: npm run test:coverage
 
       - name: Build Production Bundle
         run: npm run build
@@ -39,8 +39,8 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run Playwright E2E & Axe Accessibility Tests
-        run: npx playwright test tests/e2e/journey.spec.ts
+      - name: Run Full Playwright E2E, Offline, Documents & Axe Accessibility Gates
+        run: npm run test:e2e
 
       - name: Upload Test Results on Failure
         if: failure()

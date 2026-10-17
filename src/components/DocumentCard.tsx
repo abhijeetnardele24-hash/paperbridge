@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import type { DocumentItem } from '../types';
 import { useJourney } from '../state/JourneyContext';
-import { CheckCircle2, AlertTriangle, FileQuestion, Upload, Eye, RefreshCw, FileText } from 'lucide-react';
+import { getLocalizedDocument } from '../content/localizedScheme';
+import { CheckCircle2, AlertTriangle, FileQuestion, Upload, Eye, FileText, Trash2, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface DocumentCardProps {
   doc: DocumentItem;
@@ -9,27 +10,168 @@ interface DocumentCardProps {
 
 export const DocumentCard: React.FC<DocumentCardProps> = ({ doc: initialDoc }) => {
   const { state, updateDocumentStatus, t } = useJourney();
-  const doc = state.documents[initialDoc.id] || initialDoc;
+  const rawDoc = state.documents[initialDoc.id] || initialDoc;
+  const doc = getLocalizedDocument(rawDoc, state.locale);
   const [isInspecting, setIsInspecting] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Mock upload / inspect scan
-  const handleSimulatedUpload = () => {
+  const formatSize = (bytes: number): string => {
+    if (bytes < 1024 * 1024) {
+      return `${Math.round(bytes / 1024)} KB`;
+    }
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  };
+
+  const inspectFile = async (file: File) => {
     setIsProcessing(true);
-    setTimeout(() => {
+
+    // 1. File Size Validation (Max 2MB = 2,097,152 bytes)
+    const MAX_SIZE = 2 * 1024 * 1024;
+    const formattedSize = formatSize(file.size);
+
+    if (file.size > MAX_SIZE) {
       setIsProcessing(false);
       updateDocumentStatus(
-        doc.id,
-        'ready',
-        `${doc.category}_sample_synthetic.pdf`,
-        '540 KB',
-        'Synthetic verification passed: 300 DPI, margins intact, stamp recognized.'
+        rawDoc.id,
+        'needs_attention',
+        file.name,
+        formattedSize,
+        `${t.documents.oversizedError} (Selected: ${formattedSize})`
       );
-    }, 600);
+      return;
+    }
+
+    // 2. Type and Extension Validation
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    const isPdf = file.type === 'application/pdf' || ext === 'pdf';
+    const isImage = file.type.startsWith('image/') || ext === 'jpg' || ext === 'jpeg' || ext === 'png';
+
+    if (!isPdf && !isImage) {
+      setIsProcessing(false);
+      updateDocumentStatus(
+        rawDoc.id,
+        'needs_attention',
+        file.name,
+        formattedSize,
+        `${t.documents.unsupportedFormatError} (Detected: .${ext || 'unknown'})`
+      );
+      return;
+    }
+
+    // 3. Inspection of PDF or Image
+    if (isPdf) {
+      try {
+        const slice = file.slice(0, 5);
+        const buffer = await slice.arrayBuffer();
+        const header = new TextDecoder('ascii').decode(buffer);
+
+        if (header.startsWith('%PDF')) {
+          updateDocumentStatus(
+            rawDoc.id,
+            'ready',
+            file.name,
+            formattedSize,
+            `${t.documents.pdfHeaderVerified} (${formattedSize}, ${file.name})`
+          );
+        } else {
+          updateDocumentStatus(
+            rawDoc.id,
+            'needs_attention',
+            file.name,
+            formattedSize,
+            'Corrupted or non-standard PDF header. Please check that file is a valid PDF export.'
+          );
+        }
+      } catch {
+        updateDocumentStatus(
+          rawDoc.id,
+          'needs_attention',
+          file.name,
+          formattedSize,
+          'Unable to read PDF structure locally.'
+        );
+      } finally {
+        setIsProcessing(false);
+      }
+    } else if (isImage) {
+      try {
+        const objectUrl = URL.createObjectURL(file);
+        const img = new Image();
+
+        img.onload = () => {
+          const width = img.naturalWidth;
+          const height = img.naturalHeight;
+          URL.revokeObjectURL(objectUrl);
+
+          if (width < 600 || height < 600) {
+            updateDocumentStatus(
+              rawDoc.id,
+              'needs_attention',
+              file.name,
+              formattedSize,
+              `Low resolution (${width}x${height}px) — text may appear blurred when reviewed by case verification officers.`
+            );
+          } else {
+            updateDocumentStatus(
+              rawDoc.id,
+              'ready',
+              file.name,
+              formattedSize,
+              `${t.documents.resolutionVerified} (${width}x${height}px, ${formattedSize})`
+            );
+          }
+          setIsProcessing(false);
+        };
+
+        img.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          updateDocumentStatus(
+            rawDoc.id,
+            'needs_attention',
+            file.name,
+            formattedSize,
+            'Could not decode image scan. File may be damaged.'
+          );
+          setIsProcessing(false);
+        };
+
+        img.src = objectUrl;
+      } catch {
+        setIsProcessing(false);
+        updateDocumentStatus(
+          rawDoc.id,
+          'needs_attention',
+          file.name,
+          formattedSize,
+          'Could not inspect image metadata.'
+        );
+      }
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      inspectFile(file);
+    }
+  };
+
+  const handleLoadDemoSpecimen = () => {
+    updateDocumentStatus(
+      rawDoc.id,
+      'ready',
+      `${rawDoc.category}_specimen_synthetic.pdf`,
+      '420 KB',
+      `Safe demo specimen loaded: Valid standard synthetic ${doc.name}. Technical format and resolution verified.`
+    );
+  };
+
+  const handleRemove = () => {
+    updateDocumentStatus(rawDoc.id, 'missing', undefined, undefined, undefined);
   };
 
   const getStatusBadge = () => {
-    switch (doc.status) {
+    switch (rawDoc.status) {
       case 'ready':
         return (
           <span className="badge badge-success">
@@ -63,9 +205,9 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ doc: initialDoc }) =
         flexDirection: 'column',
         gap: 'var(--space-4)',
         borderColor:
-          doc.status === 'ready'
+          rawDoc.status === 'ready'
             ? 'rgba(23, 107, 77, 0.4)'
-            : doc.status === 'needs_attention'
+            : rawDoc.status === 'needs_attention'
             ? 'rgba(181, 91, 15, 0.5)'
             : 'var(--color-rule)',
       }}
@@ -74,7 +216,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ doc: initialDoc }) =
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-3)' }}>
         <div>
           <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-ink-muted)' }}>
-            CATEGORY: {doc.category}
+            {t.documents.categoryLabel.toUpperCase()}: {rawDoc.category}
           </span>
           <h3
             style={{
@@ -141,43 +283,93 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ doc: initialDoc }) =
       </div>
 
       {/* Attached file status or feedback */}
-      {doc.fileName && (
+      {rawDoc.fileName && (
         <div
           style={{
-            backgroundColor: 'var(--color-forest-light)',
+            backgroundColor: rawDoc.status === 'ready' ? 'var(--color-forest-light)' : 'var(--color-saffron-light)',
             padding: 'var(--space-3)',
             borderRadius: 'var(--radius-sm)',
             fontSize: 'var(--text-xs)',
-            color: 'var(--color-forest-dark)',
-            borderLeft: '3px solid var(--color-forest)',
+            color: rawDoc.status === 'ready' ? 'var(--color-forest-dark)' : 'var(--color-saffron-dark)',
+            borderLeft: rawDoc.status === 'ready' ? '3px solid var(--color-forest)' : '3px solid var(--color-saffron)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--space-1)',
           }}
         >
-          <strong>Simulated Attachment:</strong> {doc.fileName} ({doc.fileSize})
-          {doc.feedback && <div style={{ marginTop: '2px' }}>{doc.feedback}</div>}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>
+              <strong>{t.documents.inspectedFileLabel}:</strong> {rawDoc.fileName} ({rawDoc.fileSize})
+            </span>
+            <button
+              type="button"
+              onClick={handleRemove}
+              className="btn btn-text"
+              style={{ padding: '2px 6px', fontSize: 'var(--text-xs)', color: 'var(--color-crimson)', minHeight: 'auto' }}
+              title={t.documents.removeFile}
+            >
+              <Trash2 size={12} />
+              <span>{t.documents.removeFile}</span>
+            </button>
+          </div>
+          {rawDoc.feedback && <div>{rawDoc.feedback}</div>}
         </div>
       )}
 
-      {/* Actions */}
+      {/* Hidden Accessible File Input */}
+      <input
+        type="file"
+        id={`file-input-${rawDoc.id}`}
+        accept=".pdf,image/jpeg,image/png"
+        onChange={handleFileInputChange}
+        style={{ display: 'none' }}
+        data-testid={`file-input-${rawDoc.id}`}
+        aria-label={`Upload file for ${doc.name}`}
+      />
+
+      {/* Action Buttons */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 'var(--space-3)',
+          gap: 'var(--space-2)',
           marginTop: 'auto',
           paddingTop: 'var(--space-3)',
           borderTop: '1px solid var(--color-rule-subtle)',
           flexWrap: 'wrap',
         }}
       >
+        <label
+          htmlFor={`file-input-${rawDoc.id}`}
+          className="btn btn-secondary"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              document.getElementById(`file-input-${rawDoc.id}`)?.click();
+            }
+          }}
+          style={{
+            fontSize: 'var(--text-sm)',
+            flex: 1,
+            justifyContent: 'center',
+            cursor: 'pointer',
+            opacity: isProcessing ? 0.7 : 1,
+          }}
+        >
+          <Upload size={14} />
+          <span>{rawDoc.status === 'ready' ? t.documents.replaceFile : t.documents.selectFile}</span>
+        </label>
+
         <button
           type="button"
           className="btn btn-secondary"
-          onClick={handleSimulatedUpload}
-          disabled={isProcessing}
-          style={{ fontSize: 'var(--text-sm)', flex: 1, justifyContent: 'center' }}
+          onClick={handleLoadDemoSpecimen}
+          style={{ fontSize: 'var(--text-xs)', gap: '4px' }}
+          title={t.documents.loadSafeDemo}
         >
-          {isProcessing ? <RefreshCw size={14} className="spin" /> : <Upload size={14} />}
-          <span>{doc.status === 'ready' ? 'Re-inspect Sample' : t.documents.mockUpload}</span>
+          <Sparkles size={13} color="var(--color-saffron-dark)" />
+          <span>{t.documents.loadSafeDemo}</span>
         </button>
 
         <button
@@ -188,8 +380,14 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ doc: initialDoc }) =
           style={{ fontSize: 'var(--text-sm)' }}
         >
           <Eye size={14} />
-          <span>{isInspecting ? 'Hide Specimen' : 'Specimen Guide'}</span>
+          <span>{isInspecting ? t.documents.hideSpecimen : t.documents.specimenGuide}</span>
         </button>
+      </div>
+
+      {/* Privacy note */}
+      <div style={{ fontSize: '11px', color: 'var(--color-ink-subtle)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <ShieldCheck size={12} color="var(--color-forest)" />
+        <span>{t.documents.localInspectionOnly}</span>
       </div>
 
       {/* Specimen Guide drawer */}
@@ -204,12 +402,12 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ doc: initialDoc }) =
             border: '1px solid rgba(36, 91, 138, 0.2)',
           }}
         >
-          <strong>Synthetic Specimen Checklist:</strong>
+          <strong>{t.documents.specimenChecklistTitle}</strong>
           <ul style={{ paddingLeft: 'var(--space-4)', marginTop: 'var(--space-1)' }}>
-            <li>Original government header with department emblem</li>
-            <li>Applicant name and father's name matching marksheet</li>
-            <li>Revenue barcode or certificate serial identifier</li>
-            <li>No cropped edges or low-contrast flash glare</li>
+            <li>{t.documents.specimenItem1}</li>
+            <li>{t.documents.specimenItem2}</li>
+            <li>{t.documents.specimenItem3}</li>
+            <li>{t.documents.specimenItem4}</li>
           </ul>
         </div>
       )}

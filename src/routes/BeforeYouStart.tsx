@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useJourney } from '../state/JourneyContext';
 import { Clock, FileCheck, WifiOff, CheckCircle2, XCircle, ArrowRight, ShieldCheck } from 'lucide-react';
-import { SCHEME_METADATA } from '../content/scheme';
 
 export const BeforeYouStart: React.FC = () => {
+  const { t } = useJourney();
 
   return (
     <main id="main-content" tabIndex={-1} style={{ outline: 'none', padding: 'var(--space-10) 0' }}>
@@ -11,14 +12,14 @@ export const BeforeYouStart: React.FC = () => {
         {/* Header */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-            <span className="badge badge-source">Step 1 of 5: Know & Prepare</span>
-            <span className="badge badge-demo">Preparation Contract</span>
+            <span className="badge badge-source">{t.beforeYouStart.stepBadge}</span>
+            <span className="badge badge-demo">{t.beforeYouStart.badgeDemo}</span>
           </div>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-3xl)', fontWeight: 700 }}>
-            Before You Start: Preparation Contract
+            {t.beforeYouStart.heading}
           </h1>
           <p style={{ fontSize: 'var(--text-lg)', color: 'var(--color-ink-muted)' }}>
-            Understand what to expect, verify required documents, and review our privacy commitments before entering any data.
+            {t.beforeYouStart.subheading}
           </p>
         </div>
 
@@ -33,45 +34,45 @@ export const BeforeYouStart: React.FC = () => {
           <div className="paper-card" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
             <Clock size={24} color="var(--color-forest)" />
             <div>
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>EXPECTED TIME</div>
-              <div style={{ fontWeight: 700, fontSize: 'var(--text-base)' }}>~{SCHEME_METADATA.expectedTimeMinutes} Minutes</div>
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>{t.beforeYouStart.expectedTimeLabel}</div>
+              <div style={{ fontWeight: 700, fontSize: 'var(--text-base)' }}>{t.beforeYouStart.expectedTimeValue}</div>
             </div>
           </div>
 
           <div className="paper-card" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
             <FileCheck size={24} color="var(--color-forest)" />
             <div>
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>DOCUMENTS NEEDED</div>
-              <div style={{ fontWeight: 700, fontSize: 'var(--text-base)' }}>4 Key Certificates</div>
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>{t.beforeYouStart.docsNeededLabel}</div>
+              <div style={{ fontWeight: 700, fontSize: 'var(--text-base)' }}>{t.beforeYouStart.docsNeededValue}</div>
             </div>
           </div>
 
           <div className="paper-card" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
             <WifiOff size={24} color="var(--color-forest)" />
             <div>
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>OFFLINE SAFE</div>
-              <div style={{ fontWeight: 700, fontSize: 'var(--text-base)' }}>100% Client-Side</div>
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>{t.beforeYouStart.offlineSafeLabel}</div>
+              <div style={{ fontWeight: 700, fontSize: 'var(--text-base)' }}>{t.beforeYouStart.offlineSafeValue}</div>
             </div>
           </div>
         </div>
 
-        {/* Four Required Document Groups */}
+        {/* Required Document Groups */}
         <div className="paper-card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', fontWeight: 700 }}>
-            Required Document Groups to Have Nearby:
+            {t.beforeYouStart.docsHeading}
           </h2>
           <ul style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', paddingLeft: 'var(--space-4)', color: 'var(--color-ink)' }}>
             <li>
-              <strong>1. Identity Verification:</strong> School ID card, Aadhaar number document, or government photo ID.
+              <strong>1. Identity Verification:</strong> School ID card, Aadhaar document, or government photo ID.
             </li>
             <li>
               <strong>2. Family Income Certificate:</strong> Current fiscal year revenue certificate issued by the Tehsildar or SDM office.
             </li>
             <li>
-              <strong>3. School Bonafide Certificate:</strong> Signed letter from your Headmaster or College Principal confirming 2026–27 active admission.
+              <strong>3. School Bonafide Certificate:</strong> Signed letter from your Headmaster or College Principal confirming active admission.
             </li>
             <li>
-              <strong>4. Student Savings Bank Account Proof:</strong> Passbook front page showing your full name, Account Number, and 11-digit IFSC code.
+              <strong>4. Student Bank Account Proof:</strong> Passbook front page showing your full name, Account Number, and 11-digit IFSC code.
             </li>
           </ul>
         </div>
@@ -145,14 +146,14 @@ export const BeforeYouStart: React.FC = () => {
         >
           <ShieldCheck size={20} color="var(--color-forest)" style={{ flexShrink: 0, marginTop: '2px' }} />
           <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)', margin: 0, lineHeight: 1.5 }}>
-            <strong>Local-First Guarantee:</strong> Your answers stay in your web browser. You can clear your progress at any time using the "Reset Demo Data" button in the accessibility menu or footer.
+            <strong>Local-First Guarantee:</strong> {t.beforeYouStart.privacyPromise1} {t.beforeYouStart.privacyPromise2}
           </p>
         </div>
 
         {/* Action Button */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: 'var(--space-4)' }}>
           <Link to="/eligibility" className="btn btn-primary" style={{ padding: 'var(--space-3) var(--space-6)' }}>
-            <span>Check If This Journey Fits Me</span>
+            <span>{t.beforeYouStart.startEligibilityCta}</span>
             <ArrowRight size={18} />
           </Link>
         </div>

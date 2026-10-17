@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useJourney } from '../state/JourneyContext';
+import { APPLICATION_QUESTIONS } from '../content/scheme';
+import { getFieldLabel, formatFieldValue } from '../utils/formatters';
 import { CheckCircle2, AlertTriangle, ExternalLink, RotateCcw, Printer, ArrowLeft } from 'lucide-react';
 
 export const Complete: React.FC = () => {
@@ -11,6 +13,8 @@ export const Complete: React.FC = () => {
       resetDemo();
     }
   };
+
+  const inspectedDocsCount = Object.values(state.documents).filter((d) => d.status === 'ready').length;
 
   return (
     <main id="main-content" tabIndex={-1} style={{ outline: 'none', padding: 'var(--space-10) 0' }}>
@@ -45,11 +49,11 @@ export const Complete: React.FC = () => {
           </div>
 
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-2xl)', fontWeight: 800, color: 'var(--color-forest-dark)', lineHeight: 1.25 }}>
-            Your PaperBridge preparation is complete. Continue on the official portal.
+            {t.complete.heading}
           </h1>
 
           <p style={{ fontSize: 'var(--text-base)', color: 'var(--color-ink-muted)', maxWidth: '580px', margin: 0 }}>
-            You have verified your eligibility criteria, inspected required certificates, simplified official clauses, and resolved or marked all uncertain fields.
+            {t.complete.subheading}
           </p>
 
           <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap', marginTop: 'var(--space-2)' }}>
@@ -64,7 +68,7 @@ export const Complete: React.FC = () => {
 
             <button type="button" className="btn btn-secondary no-print" onClick={() => window.print()}>
               <Printer size={16} />
-              <span>Print Complete Dossier</span>
+              <span>{t.complete.printDossier}</span>
             </button>
           </div>
         </div>
@@ -78,28 +82,28 @@ export const Complete: React.FC = () => {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
               gap: 'var(--space-4)',
             }}
           >
             <div style={{ padding: 'var(--space-3)', backgroundColor: 'var(--color-paper)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-rule)' }}>
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>PREPARED ANSWERS</div>
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>{t.complete.preparedAnswersLabel}</div>
               <div style={{ fontSize: 'var(--text-xl)', fontWeight: 700, color: 'var(--color-forest)' }}>
                 {counts.completed} Questions
               </div>
             </div>
 
             <div style={{ padding: 'var(--space-3)', backgroundColor: 'var(--color-paper)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-rule)' }}>
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>HELPER VERIFICATIONS</div>
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>{t.complete.helperVerificationsLabel}</div>
               <div style={{ fontSize: 'var(--text-xl)', fontWeight: 700, color: 'var(--color-saffron)' }}>
                 {counts.uncertain} Marked Uncertain
               </div>
             </div>
 
             <div style={{ padding: 'var(--space-3)', backgroundColor: 'var(--color-paper)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-rule)' }}>
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>DOCUMENTS INSPECTED</div>
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>{t.complete.documentsInspectedLabel}</div>
               <div style={{ fontSize: 'var(--text-xl)', fontWeight: 700, color: 'var(--color-source-blue)' }}>
-                4 Certificates
+                {inspectedDocsCount} of {Object.keys(state.documents).length} Ready
               </div>
             </div>
           </div>
@@ -119,16 +123,21 @@ export const Complete: React.FC = () => {
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', color: 'var(--color-saffron-dark)' }}>
                 <AlertTriangle size={18} />
-                <strong>Remaining Items for Operator or Teacher Review:</strong>
+                <strong>{t.complete.remainingItemsTitle}</strong>
               </div>
               <ul style={{ paddingLeft: 'var(--space-4)', fontSize: 'var(--text-xs)', color: 'var(--color-ink)' }}>
                 {Object.entries(state.answers)
                   .filter(([, a]) => a.isUncertain)
-                  .map(([qid, a]) => (
-                    <li key={qid}>
-                      <strong>{qid}:</strong> {a.value || 'Unanswered'} — <em>{a.note}</em>
-                    </li>
-                  ))}
+                  .map(([qid, a]) => {
+                    const questionObj = APPLICATION_QUESTIONS.find((q) => q.id === qid);
+                    const label = questionObj ? getFieldLabel(questionObj.field, state.locale) : qid;
+                    const val = formatFieldValue(qid, a.value, state.locale);
+                    return (
+                      <li key={qid}>
+                        <strong>{label}:</strong> {val} — <em>{a.note || t.complete.verificationRequested}</em>
+                      </li>
+                    );
+                  })}
               </ul>
             </div>
           )}
@@ -138,12 +147,12 @@ export const Complete: React.FC = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
           <Link to="/review" className="btn btn-secondary">
             <ArrowLeft size={16} />
-            <span>Review Full Map</span>
+            <span>{t.complete.reviewFullMap}</span>
           </Link>
 
           <button type="button" className="btn btn-secondary" onClick={handleReset} style={{ borderColor: 'var(--color-crimson)', color: 'var(--color-crimson)' }}>
             <RotateCcw size={16} />
-            <span>Reset Demo to Start Fresh</span>
+            <span>{t.complete.resetDemoCta}</span>
           </button>
         </div>
       </div>

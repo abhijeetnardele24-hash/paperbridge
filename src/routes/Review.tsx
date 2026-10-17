@@ -2,7 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useJourney } from '../state/JourneyContext';
 import { APPLICATION_QUESTIONS } from '../content/scheme';
-import { CheckCircle2, AlertTriangle, FileQuestion, ArrowRight, ArrowLeft, ArrowUpRight, ShieldCheck } from 'lucide-react';
+import { getLocalizedQuestion } from '../content/localizedScheme';
+import { getFieldLabel, formatFieldValue } from '../utils/formatters';
+import { CheckCircle2, AlertTriangle, FileQuestion, ArrowRight, ArrowLeft, ArrowUpRight } from 'lucide-react';
 
 export const Review: React.FC = () => {
   const { state, t } = useJourney();
@@ -28,8 +30,8 @@ export const Review: React.FC = () => {
         {/* Header */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-            <span className="badge badge-source">Step 4 of 5: Review Map</span>
-            <span className="badge badge-demo">Inspection Gateway</span>
+            <span className="badge badge-source">{t.review.stepBadge}</span>
+            <span className="badge badge-demo">{t.review.demoBadge}</span>
           </div>
 
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-3xl)', fontWeight: 700 }}>
@@ -60,33 +62,36 @@ export const Review: React.FC = () => {
               </h2>
             </div>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink)', margin: 0 }}>
-              These required questions have not been answered yet. Select any item to go straight to that question.
+              {t.review.missingNotice}
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
-              {missingList.map((q) => (
-                <Link
-                  key={q.id}
-                  to={`/application?q=${q.id}`}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: 'var(--space-3) var(--space-4)',
-                    backgroundColor: 'var(--color-paper-elevated)',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--color-rule)',
-                    textDecoration: 'none',
-                    color: 'var(--color-ink)',
-                    fontSize: 'var(--text-sm)',
-                  }}
-                >
-                  <span>
-                    <strong>Q{q.step}:</strong> {q.plainQuestion}
-                  </span>
-                  <ArrowUpRight size={16} color="var(--color-crimson)" />
-                </Link>
-              ))}
+              {missingList.map((q) => {
+                const locQ = getLocalizedQuestion(q, state.locale);
+                return (
+                  <Link
+                    key={q.id}
+                    to={`/application?q=${q.id}`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: 'var(--space-3) var(--space-4)',
+                      backgroundColor: 'var(--color-paper-elevated)',
+                      borderRadius: 'var(--radius-sm)',
+                      border: '1px solid var(--color-rule)',
+                      textDecoration: 'none',
+                      color: 'var(--color-ink)',
+                      fontSize: 'var(--text-sm)',
+                    }}
+                  >
+                    <span>
+                      <strong>Q{q.step}:</strong> {locQ.plainQuestion}
+                    </span>
+                    <ArrowUpRight size={16} color="var(--color-crimson)" />
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}
@@ -110,12 +115,14 @@ export const Review: React.FC = () => {
               </h2>
             </div>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink)', margin: 0 }}>
-              These answers were marked for helper verification. They will be highlighted in your helper handoff packet.
+              {t.review.uncertainNotice}
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
               {uncertainList.map((q) => {
+                const locQ = getLocalizedQuestion(q, state.locale);
                 const a = state.answers[q.id];
+                const humanValue = formatFieldValue(q.id, a?.value || '', state.locale);
                 return (
                   <Link
                     key={q.id}
@@ -135,12 +142,12 @@ export const Review: React.FC = () => {
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span>
-                        <strong>Q{q.step}:</strong> {q.plainQuestion}
+                        <strong>Q{q.step}:</strong> {locQ.plainQuestion}
                       </span>
                       <ArrowUpRight size={16} color="var(--color-saffron)" />
                     </div>
                     <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>
-                      Current value: <strong>{a.value || 'None'}</strong> • <em>Note: {a.note}</em>
+                      {t.review.currentValueLabel} <strong>{humanValue}</strong> • <em>{t.review.noteLabel} {a?.note || t.review.needsChecking}</em>
                     </div>
                   </Link>
                 );
@@ -161,6 +168,9 @@ export const Review: React.FC = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
             {completedList.map((q) => {
               const a = state.answers[q.id];
+              const humanLabel = getFieldLabel(q.field, state.locale);
+              const humanValue = formatFieldValue(q.id, a?.value || '', state.locale);
+
               return (
                 <div
                   key={q.id}
@@ -176,14 +186,15 @@ export const Review: React.FC = () => {
                   }}
                 >
                   <div>
-                    <span style={{ color: 'var(--color-ink-muted)' }}>Q{q.step}:</span> <strong>{q.field}:</strong>{' '}
-                    <span>{a.value}</span>
+                    <span style={{ color: 'var(--color-ink-muted)' }}>Q{q.step}:</span>{' '}
+                    <strong>{humanLabel}:</strong>{' '}
+                    <span>{humanValue}</span>
                   </div>
                   <Link
                     to={`/application?q=${q.id}`}
                     style={{ fontSize: 'var(--text-xs)', color: 'var(--color-forest)', textDecoration: 'none', fontWeight: 600 }}
                   >
-                    Edit
+                    {t.review.editAction}
                   </Link>
                 </div>
               );
@@ -191,34 +202,21 @@ export const Review: React.FC = () => {
           </div>
         </div>
 
-        {/* Handoff Preview Summary */}
+        {/* Bottom Navigation */}
         <div
           style={{
-            padding: 'var(--space-4)',
-            backgroundColor: 'var(--color-paper-elevated)',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--color-rule)',
-            fontSize: 'var(--text-xs)',
-            color: 'var(--color-ink-muted)',
             display: 'flex',
-            flexDirection: 'column',
-            gap: 'var(--space-1)',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingTop: 'var(--space-6)',
+            borderTop: '1px solid var(--color-rule)',
+            flexWrap: 'wrap',
+            gap: 'var(--space-4)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', color: 'var(--color-forest)' }}>
-            <ShieldCheck size={16} />
-            <strong>What will be included in the helper packet:</strong>
-          </div>
-          <p style={{ margin: 0 }}>
-            Only sections you explicitly select on the next screen. Personal national identity documents are excluded by default to protect your privacy.
-          </p>
-        </div>
-
-        {/* Navigation Actions */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 'var(--space-4)' }}>
           <Link to="/application" className="btn btn-secondary">
             <ArrowLeft size={16} />
-            <span>Back to Questions</span>
+            <span>{t.review.returnToQuestion}</span>
           </Link>
 
           <Link to="/handoff" className="btn btn-primary" style={{ padding: 'var(--space-3) var(--space-6)' }}>

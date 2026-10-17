@@ -7,7 +7,7 @@ import { UncertaintyModal } from '../components/UncertaintyModal';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 export const Application: React.FC = () => {
-  const { state, setQuestionAnswer, markQuestionUncertain, counts } = useJourney();
+  const { state, setQuestionAnswer, markQuestionUncertain, counts, t } = useJourney();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -56,9 +56,9 @@ export const Application: React.FC = () => {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-            <span className="badge badge-source">Step 3 of 5: Application Journey</span>
+            <span className="badge badge-source">{t.application.stepBadge}</span>
             <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: 'var(--color-ink-muted)' }}>
-              {counts.completed} Answered • {counts.uncertain} Uncertain • {counts.missing} Remaining
+              {counts.completed} {t.application.answeredCount} • {counts.uncertain} {t.application.uncertainCount} • {counts.missing} {t.application.remainingCount}
             </span>
           </div>
 
@@ -127,11 +127,11 @@ export const Application: React.FC = () => {
         >
           <button type="button" className="btn btn-secondary" onClick={handleBack}>
             <ArrowLeft size={16} />
-            <span>{currentIndex === 0 ? 'Back to Documents' : 'Previous Question'}</span>
+            <span>{currentIndex === 0 ? t.documents.heading : t.application.prevQuestion}</span>
           </button>
 
           <button type="button" className="btn btn-primary" onClick={handleNext}>
-            <span>{isLastQuestion ? 'Review Application Map' : 'Next Question'}</span>
+            <span>{isLastQuestion ? t.application.reviewAnswers : t.application.nextQuestion}</span>
             <ArrowRight size={16} />
           </button>
         </div>

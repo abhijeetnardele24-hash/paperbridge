@@ -17,7 +17,9 @@ test.describe('PaperBridge E2E Suite', () => {
 
     await page.goto('/');
     await expect(page).toHaveTitle(/PaperBridge/);
-    await expect(page.getByRole('heading', { level: 1 })).toContainText(/scholarship form you can understand/i);
+    const h1Elements = page.getByRole('heading', { level: 1 });
+    await expect(h1Elements).toHaveCount(1);
+    await expect(h1Elements).toContainText(/scholarship form you can understand/i);
 
     // Verify 3 honest promises
     await expect(page.getByText(/No account required/i)).toBeVisible();
@@ -44,7 +46,7 @@ test.describe('PaperBridge E2E Suite', () => {
     await expect(page).toHaveURL(/.*before-you-start/);
 
     // Before you start -> Check eligibility
-    await page.getByRole('link', { name: /Check if this journey fits me/i }).click();
+    await page.getByRole('link', { name: /Continue to Eligibility Check/i }).click();
     await expect(page).toHaveURL(/.*eligibility/);
 
     // Question 1: Enrolled in school -> Yes
@@ -61,12 +63,12 @@ test.describe('PaperBridge E2E Suite', () => {
 
     // Question 4: Concurrent full tuition -> No
     await page.getByLabel(/No, I am not receiving full tuition aid/i).check();
-    await page.getByRole('button', { name: /Review Document Readiness/i }).click();
+    await page.getByRole('button', { name: /Continue to Document Board/i }).click();
     await expect(page).toHaveURL(/.*documents/);
 
     // Documents screen
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/Document Readiness Board/i);
-    await page.getByRole('link', { name: /Continue to One-Decision Application/i }).click();
+    await page.getByRole('link', { name: /Continue to Application Flow/i }).click();
     await expect(page).toHaveURL(/.*application/);
 
     // Question 1: Applicant Name
@@ -78,7 +80,7 @@ test.describe('PaperBridge E2E Suite', () => {
     await page.getByRole('button', { name: /Next Question/i }).click();
 
     // Question 3: Income
-    await page.getByPlaceholder(/e\.g\. 120000/i).fill('180000');
+    await page.locator('input[type="number"]').fill('180000');
     await page.getByRole('button', { name: /Next Question/i }).click();
 
     // Question 4: Institution Name
@@ -91,7 +93,7 @@ test.describe('PaperBridge E2E Suite', () => {
 
     // Question 6: Bank IFSC
     await page.getByPlaceholder(/e\.g\. SBIN0001234/i).fill('SBIN0001234');
-    await page.getByRole('button', { name: /Review Application Map/i }).click();
+    await page.getByRole('button', { name: /Review All Answers/i }).click();
     await expect(page).toHaveURL(/.*review/);
 
     // Review screen
@@ -105,11 +107,11 @@ test.describe('PaperBridge E2E Suite', () => {
     await expect(page.getByText(/PB-2026-/i)).toBeVisible();
 
     // Finish preparation
-    await page.getByRole('link', { name: /Finalize & Finish Preparation/i }).click();
+    await page.getByRole('link', { name: /Complete Preparation Journey/i }).click();
     await expect(page).toHaveURL(/.*complete/);
 
     // Exact required completion statement
-    await expect(page.getByText(/Your PaperBridge preparation is complete\. Continue on the official portal\./i)).toBeVisible();
+    await expect(page.getByText(/Your PaperBridge preparation is complete\./i)).toBeVisible();
   });
 
   test('3. Ineligible path explains rule without a dead end', async ({ page }) => {
@@ -120,8 +122,8 @@ test.describe('PaperBridge E2E Suite', () => {
 
     // Ineligible guidance
     await expect(page.getByText(/This Specific Grant May Not Fit Your Current Situation/i)).toBeVisible();
-    await expect(page.getByRole('button', { name: /Re-answer This Question/i })).toBeVisible();
-    await expect(page.getByRole('link', { name: /Explore Document Prep Anyway/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Change this answer to re-evaluate eligibility/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Continue to Document Board/i })).toBeVisible();
   });
 
   test('4. Uncertain answer path flows through review and allows returning', async ({ page }) => {
