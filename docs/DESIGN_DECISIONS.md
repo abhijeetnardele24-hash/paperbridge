@@ -87,7 +87,7 @@ Every interaction in PaperBridge was designed to eliminate procedural anxiety, c
   - Interactive sharing checklist with personal identifiers (Aadhaar, Bank details) unselected by default.
   - Local token generation (`PB-2026-XXXXXX`) with 48-hour expiration.
   - Printable summary checklist formatted for black-and-white physical printing.
-  - One-click instant revocation that immediately invalidates the token.
+  - One-click local revocation: clears the active handoff state in the originating browser, but cannot remotely invalidate a packet already copied or opened elsewhere.
 - **Rejected Alternative:** 
   - Unauthenticated public share link: Severe privacy violation.
   - PDF export containing full unredacted demographic details: Leaks sensitive personal identifiers.

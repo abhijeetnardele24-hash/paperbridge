@@ -60,9 +60,9 @@ PaperBridge does not attempt to replace official government portals or decide le
 ---
 
 ## Accomplishments We're Proud Of
-- Achieving **0 critical and 0 serious axe-core accessibility violations** across all 9 primary routes.
+- Achieving **0 axe-core accessibility violations** across all 9 primary routes.
 - Designing an interaction model where uncertainty is treated as valid information rather than a validation error.
-- Delivering a lightning-fast application shell (<115 kB gzipped) that runs completely offline with zero trackers.
+- Delivering a production application shell (490 kB main chunk / 140 kB gzip) that runs completely offline with self-hosted fonts and zero trackers.
 
 ---
 
@@ -74,8 +74,7 @@ PaperBridge does not attempt to replace official government portals or decide le
 
 ## What's Next for PaperBridge
 - Expanding the fictional scheme framework to support multi-scheme comparison.
-- Adding offline PWA Service Worker caching for complete offline operation in low-connectivity rural schools.
-- Partnering with educational non-profits and CSC operators to run structured usability field trials.
+- Partnering with educational non-profits and CSC operators to run structured usability field trials with rural student cohorts.
 
 ---
 
@@ -103,4 +102,4 @@ In compliance with hackathon rules: Generative AI coding assistance was utilized
 3. **One-Decision Application:** Step-by-step form interface demonstrating the Plain Meaning ↔ Official Wording layer toggle.
 4. **Uncertainty Modal:** Reassuring dialog explaining that uncertainty is normal, providing evidence hints and helper notes.
 5. **Review Map:** Tri-partitioned overview grouping items into Complete, Needs Checking, and Missing Required Questions.
-6. **Consent-Controlled Helper Handoff:** Selective permission checklist, expiring token generation (`PB-2026-XXXXXX`), and instant revocation action.
+6. **Consent-Controlled Helper Handoff:** Selective permission checklist, expiring token generation (`PB-2026-XXXXXX`), and local revocation action.

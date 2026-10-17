@@ -245,4 +245,72 @@ describe('Review and Safe Handoff Integration', () => {
     expect(screen.getByText(/Invalid Packet Token/i)).toBeInTheDocument();
     expect(screen.getByText(/Packet integrity violation/i)).toBeInTheDocument();
   });
+
+  it('strictly rejects query-parameter payloads to enforce the privacy boundary', () => {
+    const validPayload = {
+      v: 1,
+      token: 'PB-QUERY-1234',
+      scheme: 'BrightSteps Student Support Grant (Demo)',
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      helper: 'Test Helper',
+      sections: ['Academic Details'],
+      includesIdentifiers: false,
+      data: {
+        q_institution_name: { field: 'institution_name', value: 'Polytechnic', isUncertain: false },
+      },
+    };
+    const uint8 = new TextEncoder().encode(JSON.stringify(validPayload));
+    let bin = '';
+    for (let i = 0; i < uint8.length; i++) bin += String.fromCharCode(uint8[i]);
+    const encoded = encodeURIComponent(btoa(bin));
+
+    render(
+      <JourneyProvider>
+        <MemoryRouter initialEntries={[`/handoff/view?token=PB-QUERY-1234&p=${encoded}`]}>
+          <Routes>
+            <Route path="/handoff/view" element={<HandoffView />} />
+          </Routes>
+        </MemoryRouter>
+      </JourneyProvider>
+    );
+
+    expect(screen.getByText(/Invalid Packet Token/i)).toBeInTheDocument();
+    expect(screen.getByText(/Privacy boundary violation: Handoff data must be passed exclusively via URL fragment/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Active Consented Packet/i)).not.toBeInTheDocument();
+  });
+
+  it('renders truthful privacy boundary notices without claiming encryption or remote revocation', () => {
+    const payload = {
+      v: 1,
+      token: 'PB-HONEST-001',
+      scheme: 'BrightSteps Student Support Grant (Demo)',
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      helper: 'Honest Helper',
+      sections: ['Academic Details'],
+      includesIdentifiers: false,
+      data: {
+        q_institution_name: { field: 'institution_name', value: 'Rural College', isUncertain: false },
+      },
+    };
+    const uint8 = new TextEncoder().encode(JSON.stringify(payload));
+    let bin = '';
+    for (let i = 0; i < uint8.length; i++) bin += String.fromCharCode(uint8[i]);
+    const encoded = encodeURIComponent(btoa(bin));
+
+    render(
+      <JourneyProvider>
+        <MemoryRouter initialEntries={[`/handoff/view#token=PB-HONEST-001&p=${encoded}`]}>
+          <Routes>
+            <Route path="/handoff/view" element={<HandoffView />} />
+          </Routes>
+        </MemoryRouter>
+      </JourneyProvider>
+    );
+
+    expect(screen.getByText(/Local Demonstration Privacy Boundary/i)).toBeInTheDocument();
+    expect(screen.getByText(/Unencrypted Bearer Fragment/i)).toBeInTheDocument();
+    expect(screen.getByText(/Local Revocation Boundary/i)).toBeInTheDocument();
+  });
 });

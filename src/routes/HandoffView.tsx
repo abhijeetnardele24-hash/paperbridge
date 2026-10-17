@@ -21,55 +21,61 @@ export const HandoffView: React.FC = () => {
   const location = useLocation();
   const { state } = useJourney();
 
-  // Read from hash fragment first (privacy boundary), with fallback to search query
+  // Accept token and payload EXCLUSIVELY from location.hash (privacy boundary).
+  // Query parameters are strictly rejected to prevent URL leakage to server logs, referrer headers, or browser history.
   const rawHash = location.hash || (typeof window !== 'undefined' ? window.location.hash : '');
   const hash = rawHash.replace(/^#/, '');
   const hashParams = new URLSearchParams(hash);
-  const token = hashParams.get('token') || searchParams.get('token') || '';
-  const rawP = hashParams.get('p') || searchParams.get('p') || '';
+  const token = hashParams.get('token') || '';
+  const rawP = hashParams.get('p') || '';
 
   let payload: ConsentedPayload | null = null;
   let validationError = '';
 
-  if (rawP) {
-    if (rawP.length > 20000) {
-      validationError = 'Payload exceeds safety size limit (oversized packet rejected).';
-    } else {
-      try {
-        const binary = atob(decodeURIComponent(rawP));
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-          bytes[i] = binary.charCodeAt(i);
-        }
-        const jsonStr = new TextDecoder().decode(bytes);
-        const parsed = JSON.parse(jsonStr) as Partial<ConsentedPayload>;
+  // Check for rejected query-string attempts
+  const queryP = searchParams.get('p');
+  const queryToken = searchParams.get('token');
+  if (queryP || queryToken) {
+    validationError = 'Privacy boundary violation: Handoff data must be passed exclusively via URL fragment (#), not query parameters (?). Query parameters are strictly rejected to prevent server log and referrer leakage.';
+  } else if (!rawP) {
+    validationError = 'No valid handoff payload was supplied in the redemption URL fragment (#). Please generate a packet first.';
+  } else if (rawP.length > 20000) {
+    validationError = 'Payload exceeds safety size limit (oversized packet rejected).';
+  } else {
+    try {
+      const binary = atob(decodeURIComponent(rawP));
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      const jsonStr = new TextDecoder().decode(bytes);
+      const parsed = JSON.parse(jsonStr) as Partial<ConsentedPayload>;
 
-        // Schema validation
-        if (parsed.v !== 1) {
-          validationError = 'Unsupported packet schema version.';
-        } else if (!parsed.token || (token && parsed.token !== token)) {
-          validationError = 'Token mismatch between packet header and verification signature.';
-        } else if (!parsed.createdAt || isNaN(new Date(parsed.createdAt).getTime()) || !parsed.expiresAt || isNaN(new Date(parsed.expiresAt).getTime())) {
-          validationError = 'Malformed or invalid timestamp in packet payload.';
-        } else if (!Array.isArray(parsed.sections)) {
-          validationError = 'Invalid sections manifest.';
-        } else if (!parsed.data || typeof parsed.data !== 'object') {
-          validationError = 'Invalid packet payload structure.';
-        } else if (!parsed.includesIdentifiers) {
-          // Verify data minimization: no sensitive identifiers should be present
-          const forbiddenKeys = ['q_legal_name', 'q_dob', 'legal_name', 'date_of_birth'];
-          const hasForbidden = Object.keys(parsed.data).some((k) => forbiddenKeys.includes(k) || forbiddenKeys.includes(parsed.data?.[k]?.field || ''));
-          if (hasForbidden) {
-            validationError = 'Packet integrity violation: student excluded personal identifiers, but payload contained identity records.';
-          } else {
-            payload = parsed as ConsentedPayload;
-          }
+      // Schema validation
+      if (parsed.v !== 1) {
+        validationError = 'Unsupported packet schema version.';
+      } else if (!parsed.token || (token && parsed.token !== token)) {
+        validationError = 'Token mismatch between packet header and verification signature.';
+      } else if (!parsed.createdAt || isNaN(new Date(parsed.createdAt).getTime()) || !parsed.expiresAt || isNaN(new Date(parsed.expiresAt).getTime())) {
+        validationError = 'Malformed or invalid timestamp in packet payload.';
+      } else if (!Array.isArray(parsed.sections)) {
+        validationError = 'Invalid sections manifest.';
+      } else if (!parsed.data || typeof parsed.data !== 'object') {
+        validationError = 'Invalid packet payload structure.';
+      } else if (!parsed.includesIdentifiers) {
+        // Verify data minimization: no sensitive identifiers should be present
+        const forbiddenKeys = ['q_legal_name', 'q_dob', 'legal_name', 'date_of_birth'];
+        const hasForbidden = Object.keys(parsed.data).some((k) => forbiddenKeys.includes(k) || forbiddenKeys.includes(parsed.data?.[k]?.field || ''));
+        if (hasForbidden) {
+          validationError = 'Packet integrity violation: student excluded personal identifiers, but payload contained identity records.';
         } else {
           payload = parsed as ConsentedPayload;
         }
-      } catch {
-        validationError = 'Could not decode or parse consented packet payload.';
+      } else {
+        payload = parsed as ConsentedPayload;
       }
+    } catch {
+      validationError = 'Could not decode or parse consented packet payload.';
     }
   }
 
@@ -254,16 +260,16 @@ export const HandoffView: React.FC = () => {
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', color: 'var(--color-forest-dark)', fontWeight: 700 }}>
                 <ShieldCheck size={16} />
-                <span>Local Demonstration Security Boundary</span>
+                <span>Local Demonstration Privacy Boundary</span>
               </div>
               <p style={{ margin: 0 }}>
-                • <strong>Zero Remote Transmission:</strong> PaperBridge has no central backend. This data was unpacked locally in your browser from the URL fragment.
+                • <strong>Zero Remote Transmission:</strong> PaperBridge has no central backend. This data was unpacked locally in your browser exclusively from the URL fragment (#).
               </p>
               <p style={{ margin: 0 }}>
-                • <strong>Bearer Demonstration Token:</strong> Anyone with access to the link or QR packet can inspect the consented fields.
+                • <strong>Unencrypted Bearer Fragment:</strong> The payload is URL-encoded (Base64) within the URL fragment for client-side transport, not cryptographically encrypted. Anyone with access to the link or QR packet can inspect the consented fields.
               </p>
               <p style={{ margin: 0 }}>
-                • <strong>Revocation & Expiry Boundary:</strong> Local device revocation invalidates this session token on the student's browser but cannot retroactively erase previously copied payloads. Expiration is verified against the receiving device clock.
+                • <strong>Local Revocation Boundary:</strong> Local revocation clears the current browser's active handoff state, but cannot remotely invalidate or delete a packet already copied or opened elsewhere. Expiration is checked against the local receiving device clock without server-backed access control.
               </p>
             </div>
           </div>

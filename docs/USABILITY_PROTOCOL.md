@@ -31,32 +31,34 @@
 | **Task 2: Eligibility Triage** | *"Check whether the BrightSteps Grant applies to a student enrolled in Class 11 with family income below ₹2 Lakhs."* | Navigates through 4 eligibility questions and reaches the document preparation screen without abandoning. | 90 seconds |
 | **Task 3: Document Readiness** | *"Look at the Document Readiness Board. Which document is currently missing and needs to be gathered?"* | Correctly identifies the Bank Account Proof as missing and inspects the synthetic specimen guide. | 60 seconds |
 | **Task 4: Signature Interaction & Uncertainty** | *"Answer Question 2 about your date of birth. Then on Question 5, show how you would inspect the official government clause and what you would do if you aren't sure of the answer."* | Toggles between Plain Meaning and Official Wording tabs; activates the "I am not sure" button and reviews evidence hints. | 120 seconds |
-| **Task 5: Helper Handoff & Revocation** | *"You need help from a school teacher. Create a helper share packet that excludes your personal photo ID, then revoke access once done."* | Generates local handoff token with ID unchecked; successfully clicks "Revoke Packet Access Now". | 90 seconds |
+| **Task 5: Helper Handoff & Revocation** | *"You need help from a school teacher. Create a helper share packet that excludes your personal photo ID, then revoke access once done."* | Generates local handoff token with ID unchecked; successfully clicks "Revoke Packet Access Now" to clear local handoff state. | 90 seconds |
 
 ---
 
-## 3. Quantitative & Qualitative Metrics Matrix (Template)
+## 3. Quantitative & Qualitative Metrics Matrix (Pending Human Field Trials)
+
+*Note: While automated software and heuristic audits are complete, live participant field trials with rural first-generation applicants remain pending human execution.*
 
 | Participant | T1: Comprehension | T2: Eligibility | T3: Missing Doc | T4: Dual-Layer & Uncertainty | T5: Handoff & Revoke | Notes / Hesitations |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **P1 (Class 12 Student)** | *Scheduled* | *Scheduled* | *Scheduled* | *Scheduled* | *Scheduled* | Field trial scheduled post-hackathon |
-| **P2 (Polytechnic Student)**| *Scheduled* | *Scheduled* | *Scheduled* | *Scheduled* | *Scheduled* | Field trial scheduled post-hackathon |
-| **P3 (Teacher Helper)** | *Scheduled* | *Scheduled* | *Scheduled* | *Scheduled* | *Scheduled* | Field trial scheduled post-hackathon |
-| **P4 (Parent)** | *Scheduled* | *Scheduled* | *Scheduled* | *Scheduled* | *Scheduled* | Field trial scheduled post-hackathon |
-| **P5 (College Student)** | *Scheduled* | *Scheduled* | *Scheduled* | *Scheduled* | *Scheduled* | Field trial scheduled post-hackathon |
+| **P1 (Class 12 Student)** | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* | Field trial pending post-hackathon |
+| **P2 (Polytechnic Student)**| *Pending* | *Pending* | *Pending* | *Pending* | *Pending* | Field trial pending post-hackathon |
+| **P3 (Teacher Helper)** | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* | Field trial pending post-hackathon |
+| **P4 (Parent)** | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* | Field trial pending post-hackathon |
+| **P5 (College Student)** | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* | Field trial pending post-hackathon |
 
 ---
 
 ## 4. Pre-Submission Expert Heuristic Evaluation (Nielsen Norman Group 10 Heuristics)
 
-While field trials remain scheduled, PaperBridge was audited against the 10 NN/g Usability Heuristics:
+While field trials remain pending, PaperBridge was audited against the 10 NN/g Usability Heuristics:
 
 1. **Visibility of System Status:**
-   - *Audit Score: 10/10.* Persistent progress pill ("Step 3 of 5", "Question 1 of 6"), live local-save indicator ("Saved locally on this device"), and clear document readiness badges (Ready, Needs Attention, Missing).
+   - *Audit Score: 10/10.* Persistent progress pill ("Step 3 of 5", "Question 1 of 6"), live local-save indicator ("Saved locally on this device"), and clear document readiness badges (Technically Ready, Needs Technical Attention, Not Added).
 2. **Match Between System and the Real World:**
    - *Audit Score: 10/10.* Signature Dual-Layer design bridges statutory administrative jargon with natural spoken terminology and contextual evidence references (e.g., "Look at Box 3 of your Tahsildar certificate").
 3. **User Control and Freedom:**
-   - *Audit Score: 10/10.* Instant back navigation preserving all previous answers; instant one-click handoff revocation; non-destructive demo reset.
+   - *Audit Score: 10/10.* Instant back navigation preserving all previous answers; one-click local handoff revocation (clearing active browser state; note: cannot remotely invalidate already copied payloads); non-destructive demo reset.
 4. **Consistency and Standards:**
    - *Audit Score: 10/10.* Universal 44px touch targets, standard HTML5 radio buttons and form inputs, consistent header controls across all 9 routes.
 5. **Error Prevention:**

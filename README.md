@@ -21,7 +21,7 @@ Built with care for **Hyperbloom October — UI/UX and Web Design** by **Team Me
 | 5. Consent-Controlled Helper Handoff | 6. Accessibility & Display Preferences |
 | :---: | :---: |
 | ![Helper Handoff](docs/assets/screenshots/08_consent_handoff_qr.png) | ![Accessibility Drawer](docs/assets/screenshots/11_accessibility_drawer.png) |
-| *Selective permission, expiring token & instant revoke* | *Focus Mode, Reading Support, Read Aloud & High Contrast* |
+| *Selective permission, expiring token & local revocation* | *Focus Mode, Reading Support, Read Aloud & High Contrast* |
 
 ---
 
@@ -46,7 +46,7 @@ PaperBridge was created to provide a calm, sovereign, and source-linked preparat
    - Upfront transparency: required documents, offline capabilities, expected completion time (~12 mins), and explicit disclosure of what PaperBridge does vs does not do.
 2. **Prepare (Document Readiness Board):**
    - Visual synthetic cards for Identity, Income, Bonafide Enrolment, and Bank Proof.
-   - Clear status badges (Ready, Needs Attention, Missing), format specifications, and mock inspection feedback.
+   - Clear status badges (Technically Ready, Needs Technical Attention, Not Added), format specifications, and mock inspection feedback.
 3. **Answer (The Signature Dual-Layer Interaction):**
    - **What this means:** Simple language, practical examples, and forgiving inputs.
    - **Official wording:** Verbatim statutory clause citations (e.g., Section 3.1(a)) explaining *why* the government asks for this information.
@@ -57,7 +57,7 @@ PaperBridge was created to provide a calm, sovereign, and source-linked preparat
 5. **Hand Off (Consent-Controlled Helper Share):**
    - Selective sharing checklist where personal national identity documents are unselected by default.
    - Time-limited local token (`PB-2026-XXXXXX`) and QR representation for village operators or teachers.
-   - Working 1-click revocation to immediately invalidate helper access.
+   - Working 1-click local revocation: clears the current browser's active handoff state, but cannot remotely invalidate a packet already copied or opened elsewhere.
 
 ---
 
@@ -71,12 +71,13 @@ PaperBridge was created to provide a calm, sovereign, and source-linked preparat
 
 ---
 
-## ♿ Accessibility & Universal Design (WCAG 2.2 AA)
+## ♿ Accessibility & Universal Design (Target: WCAG 2.2 Level AA)
 
-- **Automated Audit:** **0 critical, 0 serious axe-core violations** verified across all 9 routes via `@axe-core/playwright`.
+- **Automated Target Audit:** Evaluated against WCAG 2.2 Level AA target rules; **0 axe-core violations** across all 9 routes via `@axe-core/playwright`. Automated testing targets Level AA criteria but does not constitute certified legal or third-party compliance.
 - **Contrast Ratios:** Primary ink on paper achieves **14.2:1** (exceeds WCAG AAA); warning saffron achieves **6.6:1** AAA against light surfaces.
 - **Keyboard Operability:** Universal skip link (`.skip-link`, `Alt+S`), 2px visible focus ring, no keyboard traps.
 - **Reflow & Responsive Design:** Verified zero horizontal scroll across 320px, 360px, 768px, 1024px, 1440px, and 1920px viewports.
+- **Desktop Stepper Collision Defense:** Verified by automated bounding-box tests to never overlap or clip at 1024px, 1280px, 1366px, 1440px, 1536px, and 1920px.
 - **Cognitive Accessibility Modes:**
   - **Focus Mode:** Hides secondary metadata to minimize distraction.
   - **Reading Support:** Increases line height to 1.9 and constrains measure to 60ch.
@@ -92,7 +93,7 @@ All metrics below reflect real, automated and reproducible executions:
 
 ```text
 ✓ Vitest Unit & Component Suite:
-  - 44 / 44 passed (100% test pass rate)
+  - 46 / 46 passed (100% test pass rate)
   - Strict coverage gates satisfied:
     * Statements: 87.04% (threshold: 85%)
     * Branches:   76.98% (threshold: 75%)
@@ -100,9 +101,10 @@ All metrics below reflect real, automated and reproducible executions:
     * Lines:      88.73% (threshold: 85%)
 
 ✓ Playwright Full E2E & Accessibility Suite:
-  - 26 / 26 passed across 5 test suites (accessibility, documents, journey, offline, screenshots)
-  - 0 serious or critical axe violations across all 9 primary routes
-  - Viewports verified: 320x640, 360x740, 390x844, 430x932, 768x1024, 1024x768, 1440x900, 1920x1080
+  - 27 / 27 passed across 5 test suites (accessibility, documents, journey, offline, screenshots)
+  - 0 axe-core violations across all 9 primary routes
+  - Viewports verified: 320x640, 360x740, 390x844, 430x932, 768x1024, 1024x768, 1280x800, 1366x768, 1440x900, 1536x864, 1920x1080
+  - Bounding-box collision defense verified with zero element intersections
   - Zero horizontal overflow across all viewports
 
 ✓ Google Lighthouse 13.5.0 Audit Scores (Production Build):
@@ -150,16 +152,18 @@ npm run build
 
 ---
 
-## 🚢 Deployment Configuration (Deployxa)
+## 🚢 Deployment & Submission Status
 
 PaperBridge is configured for static hosting with client-side SPA routing:
 - `deployxa.json`: Framework and build output configuration (`dist`).
 - `public/_redirects`: Universal rewrite rule (`/* /index.html 200`).
 
-To deploy via the Deployxa CLI:
-```bash
-npx deployxa deploy
-```
+### Verdict: Engineering-Ready (Submission Pending)
+All automated code, build, and test acceptance criteria are complete and passing. The following human verification tasks remain pending genuine execution:
+1. **Live Cloud Deployment:** Execute `npx deployxa deploy` or connect `dist` to a public CDN hosting target.
+2. **Demonstration Video:** Record the 3-minute presentation showcasing the five signature verbs.
+3. **Manual Assistive Tech Evaluation:** Conduct manual screen reader walkthroughs (NVDA / VoiceOver) beyond automated Axe scans.
+4. **Field Participant Testing:** Validate cognitive readability with live first-generation applicant cohorts.
 
 ---
 

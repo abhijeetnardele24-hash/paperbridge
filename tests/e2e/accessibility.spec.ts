@@ -115,7 +115,7 @@ test.describe('Accessibility & Responsive Hardening Suite', () => {
     expect(animationDuration).toMatch(/(0s|0\.01ms|0ms|1e-05s)/);
   });
 
-  test('6. Full Axe accessibility scan across all primary pages reports zero critical or serious violations', async ({ page }) => {
+  test('6. Full Axe accessibility scan across all primary pages reports zero WCAG A/AA violations', async ({ page }) => {
     for (const r of routes) {
       await page.goto(r.path);
 
@@ -123,10 +123,97 @@ test.describe('Accessibility & Responsive Hardening Suite', () => {
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
         .analyze();
 
-      const seriousOrCritical = accessibilityScanResults.violations.filter(
-        (v) => v.impact === 'serious' || v.impact === 'critical'
-      );
-      expect(seriousOrCritical, `Accessibility violations on ${r.path}: ${JSON.stringify(seriousOrCritical, null, 2)}`).toEqual([]);
+      expect(
+        accessibilityScanResults.violations,
+        `Accessibility violations on ${r.path}: ${JSON.stringify(accessibilityScanResults.violations, null, 2)}`
+      ).toEqual([]);
+    }
+  });
+
+  test('7. Desktop header elements never collide or overlap at 1024, 1280, 1366, 1440, 1536, and 1920px', async ({ page }) => {
+    const desktopViewports = [
+      { width: 1024, height: 768 },
+      { width: 1280, height: 800 },
+      { width: 1366, height: 768 },
+      { width: 1440, height: 900 },
+      { width: 1536, height: 864 },
+      { width: 1920, height: 1080 },
+    ];
+
+    const testRoutes = ['/', '/before-you-start', '/documents', '/review'];
+
+    const overlaps = (
+      r1: { x: number; y: number; width: number; height: number },
+      r2: { x: number; y: number; width: number; height: number }
+    ) => !(r1.x + r1.width <= r2.x || r2.x + r2.width <= r1.x || r1.y + r1.height <= r2.y || r2.y + r2.height <= r1.y);
+
+    for (const vp of desktopViewports) {
+      await page.setViewportSize(vp);
+
+      for (const routePath of testRoutes) {
+        await page.goto(routePath);
+        await page.evaluate(() => document.fonts.ready);
+
+        const brand = page.locator('#header-brand');
+        const stepper = page.locator('#header-stepper');
+        const controls = page.locator('#header-controls');
+        const wordmark = page.locator('#header-wordmark');
+        const badge = page.locator('#header-demo-badge');
+        const langSelect = page.locator('#language-select');
+        const a11yBtn = page.locator('#header-accessibility-btn');
+
+        await expect(brand).toBeVisible();
+        await expect(stepper).toBeVisible();
+        await expect(controls).toBeVisible();
+
+        const brandBox = await brand.boundingBox();
+        const stepperBox = await stepper.boundingBox();
+        const controlsBox = await controls.boundingBox();
+        const wordmarkBox = await wordmark.boundingBox();
+        const badgeBox = await badge.boundingBox();
+        const langBox = await langSelect.boundingBox();
+        const a11yBox = await a11yBtn.boundingBox();
+
+        expect(brandBox).not.toBeNull();
+        expect(stepperBox).not.toBeNull();
+        expect(controlsBox).not.toBeNull();
+        expect(wordmarkBox).not.toBeNull();
+        expect(badgeBox).not.toBeNull();
+        expect(langBox).not.toBeNull();
+        expect(a11yBox).not.toBeNull();
+
+        // 1. Brand block must end before Stepper starts
+        expect(overlaps(brandBox!, stepperBox!), `Brand and Stepper overlap at ${vp.width}px on ${routePath}`).toBe(false);
+        expect(brandBox!.x + brandBox!.width).toBeLessThanOrEqual(stepperBox!.x);
+
+        // 2. Stepper must end before Controls start
+        expect(overlaps(stepperBox!, controlsBox!), `Stepper and Controls overlap at ${vp.width}px on ${routePath}`).toBe(false);
+        expect(stepperBox!.x + stepperBox!.width).toBeLessThanOrEqual(controlsBox!.x);
+
+        // 3. Wordmark must not overlap Badge
+        expect(overlaps(wordmarkBox!, badgeBox!), `Wordmark and Demo Badge overlap at ${vp.width}px on ${routePath}`).toBe(false);
+
+        // 4. Language select must not overlap Accessibility button
+        expect(overlaps(langBox!, a11yBox!), `Language select and A11y button overlap at ${vp.width}px on ${routePath}`).toBe(false);
+
+        // 5. Within Stepper, each stage link must not overlap the next
+        for (let s = 1; s <= 4; s++) {
+          const stepCurrent = page.locator(`#stepper-step-${s}`);
+          const stepNext = page.locator(`#stepper-step-${s + 1}`);
+          const box1 = await stepCurrent.boundingBox();
+          const box2 = await stepNext.boundingBox();
+          expect(box1).not.toBeNull();
+          expect(box2).not.toBeNull();
+          expect(overlaps(box1!, box2!), `Stepper step ${s} overlaps step ${s + 1} at ${vp.width}px on ${routePath}`).toBe(false);
+          expect(box1!.x + box1!.width).toBeLessThanOrEqual(box2!.x);
+        }
+
+        // 6. Zero horizontal overflow at viewport
+        const hasHorizontalOverflow = await page.evaluate(() => {
+          return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+        });
+        expect(hasHorizontalOverflow, `Horizontal overflow at ${vp.width}px on ${routePath}`).toBe(false);
+      }
     }
   });
 });

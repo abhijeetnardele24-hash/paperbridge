@@ -67,7 +67,7 @@ PaperBridge bridges this chasm through a **dual-layer interface (Plain Meaning â
 | **Fact:** Forms with 20+ fields cause cognitive fatigue and high drop-off on mobile devices. | **Inference:** PaperBridge isolates each question onto a focused card with dedicated navigation, step pills, and zero distracting sidebars. |
 | **Fact:** Users distrust simplified text if they cannot verify what the official department actually asked. | **Inference:** Signature **Plain Meaning â†” Official Wording** switch with explicit clause markers (e.g., Section 4(b), Clause 12.1). |
 | **Fact:** Forced-choice forms cause guessing on complex questions (income, caste category). | **Inference:** First-class **"I am not sure"** state that preserves the answer, provides evidence hints, and flags the item on the Review Map. |
-| **Fact:** Sharing full application credentials with helpers risks privacy and identity theft. | **Inference:** Consent-controlled Helper Handoff generating time-limited local tokens with granular section permissions and instant revocation. |
+| **Fact:** Sharing full application credentials with helpers risks privacy and identity theft. | **Inference:** Consent-controlled Helper Handoff generating time-limited local tokens with granular section permissions and local revocation (clearing the active browser handoff state). |
 
 ---
 

@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
     >
       {/* Top Bar */}
       <div
-        className="container"
+        className="header-bar-container"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -90,15 +90,24 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
         }}
       >
         {/* Brand & Badge */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', minWidth: 0, flexShrink: 1 }}>
+        <div
+          id="header-brand"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-2)',
+            flexShrink: 0,
+          }}
+        >
           <Link
             to="/"
+            id="header-wordmark"
             style={{
               textDecoration: 'none',
               color: 'var(--color-ink)',
               display: 'flex',
               flexDirection: 'column',
-              minWidth: 0,
+              flexShrink: 0,
             }}
           >
             <span
@@ -114,6 +123,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
               PaperBridge
             </span>
             <span
+              id="header-brand-tagline"
               className="header-brand-tagline"
               style={{
                 fontSize: 'var(--text-xs)',
@@ -129,8 +139,15 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
           </Link>
 
           <span
+            id="header-demo-badge"
             className="badge badge-demo header-badge-demo"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              flexShrink: 0,
+              whiteSpace: 'nowrap',
+            }}
             title="Demonstration prototype for Hyperbloom October hackathon"
           >
             <ShieldCheck size={12} />
@@ -140,13 +157,15 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
 
         {/* Desktop Stepper Navigation */}
         <nav
+          id="header-stepper"
           role="navigation"
           aria-label="Journey Progress"
           className="desktop-stepper"
           style={{
             display: 'none',
             alignItems: 'center',
-            gap: 'var(--space-1)',
+            gap: '4px',
+            flexShrink: 0,
           }}
         >
           {journeyStages.map((stage) => {
@@ -155,13 +174,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
             return (
               <Link
                 key={stage.path}
+                id={`stepper-step-${stage.stepNum}`}
                 to={stage.path}
                 aria-current={isActive ? 'page' : undefined}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '6px',
-                  padding: '6px 10px',
+                  gap: '4px',
+                  padding: '4px 8px',
                   fontSize: 'var(--text-xs)',
                   fontWeight: isActive ? 700 : 500,
                   color: isActive ? 'var(--color-forest-dark)' : isCompleted ? 'var(--color-forest)' : 'var(--color-ink-muted)',
@@ -171,6 +191,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
                   border: isActive ? '1px solid rgba(23, 107, 77, 0.3)' : '1px solid transparent',
                   transition: 'background-color 0.15s ease',
                   whiteSpace: 'nowrap',
+                  flexShrink: 0,
                 }}
               >
                 <span
@@ -185,6 +206,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
                     fontWeight: 700,
                     backgroundColor: isActive ? 'var(--color-forest)' : isCompleted ? 'var(--color-forest-light)' : 'var(--color-rule)',
                     color: isActive ? '#FFFFFF' : isCompleted ? 'var(--color-forest)' : 'var(--color-ink-muted)',
+                    flexShrink: 0,
                   }}
                 >
                   {isCompleted ? <CheckCircle2 size={12} /> : stage.stepNum}
@@ -196,7 +218,15 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
         </nav>
 
         {/* Controls: Language Selector, Accessibility Trigger, Mobile Hamburger */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', flexShrink: 0 }}>
+        <div
+          id="header-controls"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-2)',
+            flexShrink: 0,
+          }}
+        >
           <label htmlFor="language-select" className="visually-hidden" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden' }}>
             Change Language
           </label>
@@ -216,6 +246,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
               minHeight: '44px',
               minWidth: '44px',
               cursor: 'pointer',
+              flexShrink: 0,
             }}
           >
             <option value="en">EN</option>
@@ -224,6 +255,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
           </select>
 
           <button
+            id="header-accessibility-btn"
             type="button"
             className="btn btn-secondary"
             onClick={onOpenAccessibility}
@@ -238,33 +270,37 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '6px',
+              flexShrink: 0,
+              whiteSpace: 'nowrap',
             }}
           >
             <SlidersHorizontal size={16} />
-            <span className="accessibility-label" style={{ display: 'none' }}>
+            <span className="accessibility-label">
               {t.nav.accessibility}
             </span>
           </button>
 
           {/* Mobile Menu Toggle Button */}
           <button
+            id="header-mobile-menu-btn"
             ref={menuButtonRef}
             type="button"
             className="btn btn-secondary mobile-menu-btn"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => setMobileMenuOpen(true)}
+            aria-label="Open navigation menu"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav-drawer"
-            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             style={{
-              padding: '6px',
               minHeight: '44px',
               minWidth: '44px',
+              padding: '8px',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
+              flexShrink: 0,
             }}
           >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            <Menu size={20} />
           </button>
         </div>
       </div>
@@ -363,15 +399,40 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAccessibility }) => {
       )}
 
       <style>{`
+        .header-bar-container {
+          width: 100%;
+          max-width: 1600px;
+          margin-left: auto;
+          margin-right: auto;
+          padding-left: var(--space-4);
+          padding-right: var(--space-4);
+          box-sizing: border-box;
+        }
         @media (min-width: 960px) {
+          .header-bar-container {
+            padding-left: var(--space-6);
+            padding-right: var(--space-6);
+          }
           .desktop-stepper {
             display: flex !important;
           }
           .mobile-menu-btn {
             display: none !important;
           }
+        }
+        @media (max-width: 1279px) {
+          .accessibility-label {
+            display: none !important;
+          }
+        }
+        @media (min-width: 1280px) {
           .accessibility-label {
             display: inline !important;
+          }
+        }
+        @media (max-width: 1100px) {
+          .header-brand-tagline {
+            display: none !important;
           }
         }
         @media (max-width: 640px) {
