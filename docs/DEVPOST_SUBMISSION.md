@@ -3,6 +3,9 @@
 ## Project Title
 **PaperBridge**
 
+- **Submitted project:** https://devpost.com/software/paperbridge-469mt7
+- **Demo video:** https://youtu.be/q9eMKzeu5AM
+
 ## Tagline / Elevator Pitch
 **Public forms that explain themselves — a consent-first, cognitively accessible interface that turns intimidating scholarship applications into a source-linked, one-decision-at-a-time journey without hiding the official wording.**
 

@@ -31,15 +31,13 @@
 | **Engineering** | Unit and Component Test Suite | **PASS** | **46 of 46 tests passing** in Vitest with coverage thresholds enforced (Statements 86.97%, Branches 78.37%, Functions 86.08%, Lines 88.63%). |
 | **Engineering** | End-to-End Test Suite | **PASS** | **27 of 27 Playwright tests passing** across `accessibility.spec.ts`, `documents.spec.ts`, `journey.spec.ts`, `offline.spec.ts`, and `screenshots.spec.ts`. |
 | **Engineering** | Production Build & Offline PWA | **PASS** | Vite production bundle built cleanly (491.87 kB main chunk / 140.92 kB gzip), PWA service worker precaches 34 assets, 0 third-party requests, Lighthouse Accessibility 100, Best Practices 100, Performance 94, SEO 91. |
-| **Release & Hosting**| Deployxa Configuration & Deployment | **PENDING ACTION** | `deployxa.json` and `public/_redirects` configured for static SPA hosting; live hosting deployment command pending. |
+| **Release & Hosting**| Deployxa Configuration & Deployment | **READY / NOT CLAIMED** | `deployxa.json` and `public/_redirects` are configured; no live URL is claimed until correct account authorization is available. |
 | **Release & Git** | Clean Git repository and MIT open-source license | **PASS** | MIT License added; focused semantic commits. |
 | **Documentation** | Complete submission documentation package | **PASS** | Synchronized with current implementation; truthful privacy and readiness statements. |
+| **Submission** | Demonstration video | **PASS** | 1:51 H.264/AAC demo published Unlisted at https://youtu.be/q9eMKzeu5AM; copyright checks reported no issues. |
+| **Submission** | Hyperbloom Devpost entry | **SUBMITTED** | Public entry: https://devpost.com/software/paperbridge-469mt7 (submitted 18 October 2026). |
 
 ---
 
-## Final Readiness Verdict: **Engineering-Ready (Submission Pending)**
-All automated engineering, build, test, and privacy boundaries defined in the Master Build Prompt are complete and verified. The following human actions remain pending:
-- Live cloud URL deployment (`npx deployxa deploy`)
-- Demonstration video capture
-- Manual assistive technology testing (NVDA / VoiceOver)
-- Field participant usability testing
+## Final Readiness Verdict: **SUBMITTED — Engineering Gates Green**
+All automated engineering, build, test, privacy, video, and Devpost submission gates are complete and verified. A live Deployxa URL is intentionally not claimed until correct account authorization is available. Manual assistive-technology testing (NVDA / VoiceOver) and field participant usability testing remain post-hackathon validation work.

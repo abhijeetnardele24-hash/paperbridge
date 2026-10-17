@@ -4,6 +4,8 @@
 
 Built with care for **Hyperbloom October — UI/UX and Web Design** by **Team MetaMask** (Abhijeet Nardele, Student, Age 18, India).
 
+**[Watch the 1:51 demo](https://youtu.be/q9eMKzeu5AM)** · **[View the submitted Devpost project](https://devpost.com/software/paperbridge-469mt7)**
+
 ---
 
 ## 📸 Interface Walkthrough
@@ -158,12 +160,10 @@ PaperBridge is configured for static hosting with client-side SPA routing:
 - `deployxa.json`: Framework and build output configuration (`dist`).
 - `public/_redirects`: Universal rewrite rule (`/* /index.html 200`).
 
-### Verdict: Engineering-Ready (Submission Pending)
-All automated code, build, and test acceptance criteria are complete and passing. The following human verification tasks remain pending genuine execution:
-1. **Live Cloud Deployment:** Execute `npx deployxa deploy` or connect `dist` to a public CDN hosting target.
-2. **Demonstration Video:** Record the 3-minute presentation showcasing the five signature verbs.
-3. **Manual Assistive Tech Evaluation:** Conduct manual screen reader walkthroughs (NVDA / VoiceOver) beyond automated Axe scans.
-4. **Field Participant Testing:** Validate cognitive readability with live first-generation applicant cohorts.
+### Verdict: Submitted and Engineering-Verified
+PaperBridge was submitted to Hyperbloom October on 18 October 2026 with its public Devpost story, evidence gallery, GitHub repository, and an unlisted 1:51 demonstration video. All automated code, build, and test acceptance criteria are complete and passing.
+
+The Deployxa configuration remains deployment-ready, but no live Deployxa URL is claimed because account authorization was not safely completed. Manual assistive-technology walkthroughs and field participant testing remain clearly identified as post-hackathon validation work.
 
 ---
 
