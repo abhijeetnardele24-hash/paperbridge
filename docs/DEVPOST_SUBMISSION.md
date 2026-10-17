@@ -46,9 +46,9 @@ PaperBridge does not attempt to replace official government portals or decide le
 - **State Management:** Typed deterministic reducer (`JourneyState`) with local browser persistence (`localStorage: paperbridge_journey_v1`).
 - **Multilingual Support:** Complete localization dictionaries for English, हिन्दी (Hindi), and मराठी (Marathi).
 - **Accessibility & Quality Testing:**
-  - 16 Vitest unit and component tests verifying state reducers, document feedback, and handoff token generation.
-  - 9 automated Playwright E2E tests validating keyboard navigation, responsive viewports (320px to 1920px), zero horizontal overflow, and full automated `@axe-core/playwright` WCAG 2.2 AA audits.
-- **Deployment:** Deployxa static site hosting with client-side SPA routing (`_redirects` and `deployxa.json`).
+  - 46 Vitest unit and component tests verifying state reducers, document feedback, and handoff token generation.
+  - 27 automated Playwright E2E tests validating keyboard navigation, responsive viewports (320px to 1920px), zero horizontal overflow, and automated `@axe-core/playwright` WCAG A/AA checks. These checks do not constitute formal WCAG certification.
+- **Deployment readiness:** Deployxa static-site configuration with client-side SPA routing (`_redirects` and `deployxa.json`) is committed; a public deployment is not claimed until account authorization and the live URL are verified.
 
 ---
 
@@ -87,12 +87,11 @@ PaperBridge does not attempt to replace official government portals or decide le
 - `vitest`
 - `@playwright/test`
 - `@axe-core/playwright`
-- `deployxa`
 
 ---
 
 ## AI Disclosure
-In compliance with hackathon rules: Generative AI coding assistance was utilized during project development for code generation, test scaffolding, and research synthesis. All architecture, user flows, content schemas, visual design tokens, and verification tests were designed, reviewed, and audited to ensure 100% adherence to project standards.
+Generative AI coding assistance was used during development for implementation support, test scaffolding, and research synthesis. Product decisions, content boundaries, interaction design, and evidence claims were reviewed against the working repository and automated tests. The demo video uses the locally installed Microsoft Heera system voice over deterministic screenshots captured from the application; no real applicant data appears.
 
 ---
 
